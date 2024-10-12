@@ -9,6 +9,7 @@ import org.springframework.web.filter.CorsFilter;
 /**
  * 跨域配置
  * 允许前端访问后端接口
+ * test
  */
 @Configuration
 public class CorsConfig {
