@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.ScoreTableMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.entity.ScoreTable">
+            <id property="contestNumId" column="contest_num_id" jdbcType="INTEGER"/>
+            <result property="againstContestId" column="against_contest_id" jdbcType="INTEGER"/>
+            <result property="player1SmallScore" column="player1_small_score" jdbcType="INTEGER"/>
+            <result property="player2SmallScore" column="player2_small_score" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        contest_num_id,against_contest_id,player1_small_score,
+        player2_small_score
+    </sql>
+</mapper>

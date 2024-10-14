@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.TreeMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.entity.Tree">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="competitionId" column="competition_id" jdbcType="INTEGER"/>
+            <result property="nodeOrder" column="node_order" jdbcType="INTEGER"/>
+            <result property="playerId" column="player_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,competition_id,node_order,
+        player_id
+    </sql>
+</mapper>

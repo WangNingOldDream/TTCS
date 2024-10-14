@@ -1,4 +1,8 @@
 package com.example.mapper;
+import java.util.List;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import org.apache.ibatis.annotations.Param;
+import java.util.Collection;
 
 import com.example.entity.AgainstForm;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -11,6 +15,15 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface AgainstFormMapper extends BaseMapper<AgainstForm> {
 
+
+    int insert(AgainstForm entity);
+
+    int delByAgainstContestId(@Param("againstContestId") Integer againstContestId);
+
+    AgainstForm selectByAgainstContestId(@Param("againstContestId") Integer againstContestId);
+    int updateById(@Param("entity") AgainstForm entity);
+
+    List<AgainstForm> selectAll(AgainstForm againstForm);
 }
 
 
