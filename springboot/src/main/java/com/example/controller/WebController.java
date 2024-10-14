@@ -6,7 +6,7 @@ import com.example.common.Result;
 import com.example.common.enums.ResultCodeEnum;
 import com.example.common.enums.RoleEnum;
 import com.example.entity.Account;
-import com.example.service.AdminService;
+import com.example.service.impl.AdminService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;

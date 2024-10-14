@@ -2,7 +2,7 @@ package com.example.controller;
 
 import com.example.common.Result;
 import com.example.entity.Message;
-import com.example.service.MessageService;
+import com.example.service.impl.MessageService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;

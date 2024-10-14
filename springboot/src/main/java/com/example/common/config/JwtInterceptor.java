@@ -10,7 +10,7 @@ import com.example.common.enums.ResultCodeEnum;
 import com.example.common.enums.RoleEnum;
 import com.example.entity.Account;
 import com.example.exception.CustomException;
-import com.example.service.AdminService;
+import com.example.service.impl.AdminService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

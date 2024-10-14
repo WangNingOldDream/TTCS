@@ -2,7 +2,7 @@ package com.example.controller;
 
 import com.example.common.Result;
 import com.example.entity.Admin;
-import com.example.service.AdminService;
+import com.example.service.impl.AdminService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
