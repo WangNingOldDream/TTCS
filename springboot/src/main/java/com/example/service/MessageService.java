@@ -2,8 +2,8 @@ package com.example.service;
 
 import cn.hutool.core.date.DateUtil;
 import com.example.entity.Account;
-import com.example.entity.Notice;
-import com.example.mapper.NoticeMapper;
+import com.example.entity.Message;
+import com.example.mapper.MessageMapper;
 import com.example.utils.TokenUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -15,26 +15,26 @@ import java.util.List;
  * 公告信息表业务处理
  **/
 @Service
-public class NoticeService {
+public class MessageService {
 
     @Resource
-    private NoticeMapper noticeMapper;
+    private MessageMapper messageMapper;
 
     /**
      * 新增
      */
-    public void add(Notice notice) {
-        notice.setTime(DateUtil.today());
+    public void add(Message message) {
+        message.setTime(DateUtil.today());
         Account currentUser = TokenUtils.getCurrentUser();
-        notice.setUser(currentUser.getUsername());
-        noticeMapper.insert(notice);
+        message.setUser(currentUser.getUsername());
+        messageMapper.insert(message);
     }
 
     /**
      * 删除
      */
     public void deleteById(Integer id) {
-        noticeMapper.deleteById(id);
+        messageMapper.deleteById(id);
     }
 
     /**
@@ -42,37 +42,37 @@ public class NoticeService {
      */
     public void deleteBatch(List<Integer> ids) {
         for (Integer id : ids) {
-            noticeMapper.deleteById(id);
+            messageMapper.deleteById(id);
         }
     }
 
     /**
      * 修改
      */
-    public void updateById(Notice notice) {
-        noticeMapper.updateById(notice);
+    public void updateById(Message message) {
+        messageMapper.updateById(message);
     }
 
     /**
      * 根据ID查询
      */
-    public Notice selectById(Integer id) {
-        return noticeMapper.selectById(id);
+    public Message selectById(Integer id) {
+        return messageMapper.selectById(id);
     }
 
     /**
      * 查询所有
      */
-    public List<Notice> selectAll(Notice notice) {
-        return noticeMapper.selectAll(notice);
+    public List<Message> selectAll(Message message) {
+        return messageMapper.selectAll(message);
     }
 
     /**
      * 分页查询
      */
-    public PageInfo<Notice> selectPage(Notice notice, Integer pageNum, Integer pageSize) {
+    public PageInfo<Message> selectPage(Message message, Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List<Notice> list = noticeMapper.selectAll(notice);
+        List<Message> list = messageMapper.selectAll(message);
         return PageInfo.of(list);
     }
 

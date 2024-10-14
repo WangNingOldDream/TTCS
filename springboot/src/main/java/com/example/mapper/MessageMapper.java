@@ -1,17 +1,18 @@
 package com.example.mapper;
 
-import com.example.entity.Notice;
+import com.example.entity.Message;
+
 import java.util.List;
 
 /**
  * 操作notice相关数据接口
 */
-public interface NoticeMapper {
+public interface MessageMapper {
 
     /**
       * 新增
     */
-    int insert(Notice notice);
+    int insert(Message message);
 
     /**
       * 删除
@@ -21,16 +22,16 @@ public interface NoticeMapper {
     /**
       * 修改
     */
-    int updateById(Notice notice);
+    int updateById(Message message);
 
     /**
       * 根据ID查询
     */
-    Notice selectById(Integer id);
+    Message selectById(Integer id);
 
     /**
       * 查询所有
     */
-    List<Notice> selectAll(Notice notice);
+    List<Message> selectAll(Message message);
 
 }

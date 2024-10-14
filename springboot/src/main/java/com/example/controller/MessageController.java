@@ -1,8 +1,8 @@
 package com.example.controller;
 
 import com.example.common.Result;
-import com.example.entity.Notice;
-import com.example.service.NoticeService;
+import com.example.entity.Message;
+import com.example.service.MessageService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
@@ -13,17 +13,17 @@ import java.util.List;
  **/
 @RestController
 @RequestMapping("/notice")
-public class NoticeController {
+public class MessageController {
 
     @Resource
-    private NoticeService noticeService;
+    private MessageService messageService;
 
     /**
      * 新增
      */
     @PostMapping("/add")
-    public Result add(@RequestBody Notice notice) {
-        noticeService.add(notice);
+    public Result add(@RequestBody Message message) {
+        messageService.add(message);
         return Result.success();
     }
 
@@ -32,7 +32,7 @@ public class NoticeController {
      */
     @DeleteMapping("/delete/{id}")
     public Result deleteById(@PathVariable Integer id) {
-        noticeService.deleteById(id);
+        messageService.deleteById(id);
         return Result.success();
     }
 
@@ -41,7 +41,7 @@ public class NoticeController {
      */
     @DeleteMapping("/delete/batch")
     public Result deleteBatch(@RequestBody List<Integer> ids) {
-        noticeService.deleteBatch(ids);
+        messageService.deleteBatch(ids);
         return Result.success();
     }
 
@@ -49,8 +49,8 @@ public class NoticeController {
      * 修改
      */
     @PutMapping("/update")
-    public Result updateById(@RequestBody Notice notice) {
-        noticeService.updateById(notice);
+    public Result updateById(@RequestBody Message message) {
+        messageService.updateById(message);
         return Result.success();
     }
 
@@ -59,16 +59,16 @@ public class NoticeController {
      */
     @GetMapping("/selectById/{id}")
     public Result selectById(@PathVariable Integer id) {
-        Notice notice = noticeService.selectById(id);
-        return Result.success(notice);
+        Message message = messageService.selectById(id);
+        return Result.success(message);
     }
 
     /**
      * 查询所有
      */
     @GetMapping("/selectAll")
-    public Result selectAll(Notice notice ) {
-        List<Notice> list = noticeService.selectAll(notice);
+    public Result selectAll(Message message) {
+        List<Message> list = messageService.selectAll(message);
         return Result.success(list);
     }
 
@@ -76,10 +76,10 @@ public class NoticeController {
      * 分页查询
      */
     @GetMapping("/selectPage")
-    public Result selectPage(Notice notice,
+    public Result selectPage(Message message,
                              @RequestParam(defaultValue = "1") Integer pageNum,
                              @RequestParam(defaultValue = "10") Integer pageSize) {
-        PageInfo<Notice> page = noticeService.selectPage(notice, pageNum, pageSize);
+        PageInfo<Message> page = messageService.selectPage(message, pageNum, pageSize);
         return Result.success(page);
     }
 
