@@ -34,7 +34,7 @@
          <ul class="no-style-ul" ref="scroll" v-infinite-scroll="load" :infinite-scroll-disabled="scrollDisabled"
             infinite-scroll-distance="10" style="height:580px;margin-bottom: 0;overflow: auto;">
             <li v-for="i in compLineNum" :key="i" style="display: flex;justify-content: space-evenly;">
-               <ElCard v-for="j in i == compLineNum ? searchedComps.length - 3 * (i - 1) : 3" :key="j" shadow="hover">
+               <ElCard v-on:click="openComp" v-for="j in i == compLineNum ? searchedComps.length - 3 * (i - 1) : 3" :key="j" shadow="hover">
                   <img :src="searchedComps[3 * (i - 1) + j - 1].cover" style="width: 100%;height: 100%;" />
                   <template #footer>
                      <ElRow justify="center">
@@ -227,6 +227,13 @@
 import { ref } from "vue";
 import logo from "/logo.png";
 import type { EpPropMergeType } from "element-plus/es/utils/vue/props/types";
+
+import { useRouter } from 'vue-router'
+const router = useRouter();
+
+function openComp(){
+   router.push("/Comp")
+}
 
 type TagType = EpPropMergeType<StringConstructor, "primary" | "success" | "danger" | "warning" | "info", unknown>;
 
