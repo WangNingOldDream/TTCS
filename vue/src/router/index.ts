@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import FirstView from '../views/FirstView.vue'
+import CompView from '@/views/CompView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -8,6 +9,11 @@ const router = createRouter({
       path: '/',
       name: 'first',
       component: FirstView
+    },
+    {
+      path: '/Comp',
+      name: 'Comp',
+      component: CompView
     },
     {
       path: '/home',
