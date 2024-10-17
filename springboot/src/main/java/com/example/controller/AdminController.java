@@ -13,6 +13,7 @@ import java.util.List;
  **/
 @RestController
 @RequestMapping("/admin")
+@CrossOrigin//允许跨域请求
 public class AdminController {
 
     @Resource

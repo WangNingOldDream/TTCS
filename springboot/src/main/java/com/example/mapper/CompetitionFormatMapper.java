@@ -9,6 +9,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @createDate 2024-10-14 10:56:28
 * @Entity com.example.entity.CompetitionFormat
 */
+
+
 public interface CompetitionFormatMapper extends BaseMapper<CompetitionFormat> {
 
 }

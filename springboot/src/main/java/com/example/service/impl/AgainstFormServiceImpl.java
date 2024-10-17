@@ -11,6 +11,10 @@ import org.springframework.stereotype.Service;
 * @description 针对表【against_form】的数据库操作Service实现
 * @createDate 2024-10-14 10:56:27
 */
+
+/*
+通过继承ServiceImpl(CommonUserMapper,CommonUser)避免手动实现接口
+ */
 @Service
 public class AgainstFormServiceImpl extends ServiceImpl<AgainstFormMapper, AgainstForm>
     implements AgainstFormService{

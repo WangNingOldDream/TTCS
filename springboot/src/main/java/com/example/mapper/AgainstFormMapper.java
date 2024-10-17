@@ -13,6 +13,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @createDate 2024-10-14 10:56:27
 * @Entity com.example.entity.AgainstForm
 */
+/**
+ 通过继承BaseMapper可以避免在Mapper中手动编写接口方法，只需要通过动态代理的方式使用父类的方法
+ */
 public interface AgainstFormMapper extends BaseMapper<AgainstForm> {
 
 

@@ -18,6 +18,9 @@ public class AgainstFormController {
     /**
      * 新增
      */
+    /*
+    @RequestBody 自动将前端传来数据转为对应类对象
+     */
     @PostMapping("/add")
     public Result add(@RequestBody AgainstForm againstForm) {
         //againstFormService.add(againstForm);
@@ -37,13 +40,13 @@ public class AgainstFormController {
      * 批量删除
      */
     @DeleteMapping("/delete/batch")
+
+    /**
+     * 修改
     public Result deleteBatch(@RequestBody List<Integer> ids) {
         //againstFormService.deleteBatch(ids);
         return Result.success();
     }
-
-    /**
-     * 修改
      */
     @PutMapping("/update")
     public Result updateById(@RequestBody AgainstForm againstForm) {

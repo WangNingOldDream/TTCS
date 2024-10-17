@@ -3,6 +3,7 @@ package com.example.entity;
 /**
  * 角色用户父类
  */
+
 public class Account {
     private Integer id;
     /** 用户名 */

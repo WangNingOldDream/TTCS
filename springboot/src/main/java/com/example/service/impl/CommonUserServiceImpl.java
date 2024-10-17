@@ -23,6 +23,7 @@ import java.util.List;
 * @description 针对表【common_user】的数据库操作Service实现
 * @createDate 2024-10-14 10:56:27
 */
+
 @Service
 public class CommonUserServiceImpl extends ServiceImpl<CommonUserMapper, CommonUser>
     implements CommonUserService{
