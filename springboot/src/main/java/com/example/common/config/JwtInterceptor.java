@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * jwt拦截器
  */
-@Component
+//@Component
 public class JwtInterceptor implements HandlerInterceptor {
 
     private static final Logger log = LoggerFactory.getLogger(JwtInterceptor.class);

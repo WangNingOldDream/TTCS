@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.common.Result;
 import com.example.entity.AgainstForm;
 import com.example.service.impl.AgainstFormServiceImpl;
@@ -23,7 +24,7 @@ public class AgainstFormController {
      */
     @PostMapping("/add")
     public Result add(@RequestBody AgainstForm againstForm) {
-        //againstFormService.add(againstForm);
+        againstFormService.save(againstForm);
         return Result.success();
     }
 
@@ -39,18 +40,21 @@ public class AgainstFormController {
     /**
      * 批量删除
      */
-    @DeleteMapping("/delete/batch")
+
 
     /**
      * 修改
+     *  @DeleteMapping("/delete/batch")
     public Result deleteBatch(@RequestBody List<Integer> ids) {
         //againstFormService.deleteBatch(ids);
         return Result.success();
     }
-     */
+*/
+
+
     @PutMapping("/update")
     public Result updateById(@RequestBody AgainstForm againstForm) {
-        //againstFormService.updateById(againstForm);
+        againstFormService.updateById(againstForm);
         return Result.success();
     }
 
@@ -59,19 +63,26 @@ public class AgainstFormController {
      */
     @GetMapping("/selectById/{id}")
     public Result selectById(@PathVariable Integer id) {
-//        AgainstForm againstForm = againstFormService.selectById(id);
-//        return Result.success(againstForm);
-        return Result.success();
+        AgainstForm againstForm= againstFormService.getById(id);
+        return Result.success(againstForm);
     }
 
     /**
      * 查询所有
      */
     @GetMapping("/selectAll")
-    public Result selectAll(AgainstForm againstForm ) {
-//        List<AgainstForm> list = againstFormService.selectAll(againstForm);
-//        return Result.success(list);
-        return Result.success();
+    public Result selectAll(String params) {
+        List<AgainstForm> list=null;
+        if(params!=null&&!"".equals(params)){
+            QueryWrapper<AgainstForm> queryWrapper=new QueryWrapper<>();
+            queryWrapper.like("competition_id",params);
+            queryWrapper.or();
+            queryWrapper.like("against_contest_id",params);
+            list=againstFormService.list(queryWrapper);
+            return Result.success(list);
+        }
+        list = againstFormService.list();
+        return Result.success(list);
     }
 
     @GetMapping("/createAgainstForm")

@@ -24,7 +24,7 @@ public interface AgainstFormMapper extends BaseMapper<AgainstForm> {
     int delByAgainstContestId(@Param("againstContestId") Integer againstContestId);
 
     AgainstForm selectByAgainstContestId(@Param("againstContestId") Integer againstContestId);
-    int updateById(@Param("entity") AgainstForm entity);
+
 
     List<AgainstForm> selectAll(AgainstForm againstForm);
 }

@@ -48,36 +48,6 @@
         </trim>
     </insert>
 
-    <update id="updateById">
-        update against_form
-        <set>
-            <if test="competitionId != null">
-                competiton_id = #{competitionId},
-            </if>
-            <if test="orderInCompetition != null">
-                order_in_competiton = #{orderInCompetition},
-            </if>
-            <if test="refereeId != null">
-                referee_id = #{refereeId},
-            </if>
-            <if test="againstState != null">
-                against_state = #{againstState},
-            </if>
-            <if test="totalContestNum != null">
-                total_contest_num = #{totalContestNum},
-            </if>
-            <if test="player1LargeScore != null">
-                player1_large_score = #{player1LargeScore},
-            </if>
-            <if test="player2LargeScore != null">
-                player2_large_score = #{player2LargeScore},
-            </if>
-            <if test="record != null">
-                record = #{record},
-            </if>
-        </set>
-        where id = #{against_contest_id}
-    </update>
     <delete id="delByAgainstContestId">
         delete
         from against_form

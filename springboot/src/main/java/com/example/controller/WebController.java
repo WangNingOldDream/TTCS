@@ -69,5 +69,4 @@ public class WebController {
         }
         return Result.success();
     }
-
 }
