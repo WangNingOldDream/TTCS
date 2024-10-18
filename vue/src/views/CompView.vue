@@ -1,75 +1,66 @@
 <template>
-  <canvas ref="treeCanvas" :width="canvasWidth" :height="canvasHeight">
-  </canvas>
+  <h1 style="width: 100%;height: 50px;background-color: #ff4d00;margin-top: 0;text-align: center;">{{ compName }}</h1>
+  <div style="display: flex;justify-content: center; width: 100%;height:auto">
+  <CompTree :tree-data="treeData" :against-data="againstData" :user-id="1" role="赛事管理员"></CompTree>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { nextTick, onMounted, ref } from "vue";
+import favicon from '/favicon.ico'
+import CompTree from "@/components/CompTree.vue";
 
-let treeData = ref([
-  {
-    nodeOrder: 1,
-    playerId: 1,
-  },
-]);
+const compName = "乒乓球赛事系统";
 
-for (let i = 2; i < 10; i++) {
-  treeData.value.push({
-    nodeOrder: i,
-    playerId: i
-  });
-}
-
-const normalNodeW = 100
-const excessNodeW = 200
-const nodeHeight = 140
-
-const levelNum = Math.ceil(Math.log2(treeData.value.length))+1;
-const canvasHeight = nodeHeight * levelNum;
-const excessNodeNum = Math.pow(2, levelNum - 1) > treeData.value.length ? treeData.value.length - Math.pow(2, levelNum - 2) : 0;
-const canvasWidth = normalNodeW * Math.pow(2, levelNum - 1) + excessNodeW * excessNodeNum;
-const nodeNum = excessNodeNum > 0 ? Math.pow(2, levelNum - 1) - 1 + 2 * excessNodeNum : Math.pow(2, levelNum) - 1;
-
-const treeNodes: any[] = [];
-for (let j = Math.pow(2, levelNum - 1); j <= nodeNum; j++) {
-  let y = nodeHeight * (levelNum - 1);
-  let nodeW = excessNodeNum > 0 ? excessNodeW : normalNodeW;
-  let x = nodeW * (j - Math.pow(2, levelNum - 1)) + nodeW / 2;
-  treeNodes.push({
-    nodeOrder: j,
-    x: x,
-    y: y
-  });
-}
-
-for (let i = levelNum - 1; i > 0; i--) {
-  for (let j = Math.pow(2, i - 1); j < Math.pow(2, i) && j <= nodeNum; j++) {
-    let y = 140 * (i - 1);
-    let x = undefined;
-    let children = treeNodes.filter(element => element.nodeOrder == j * 2 || element.nodeOrder == (j * 2 + 1));
-    if (children.length>0) {
-      x = (children[0].x + children[1].x) / 2;
-    }
-    else {
-      x = treeNodes.find(element => element.nodeOrder == j - 1).x + normalNodeW;
-    }
-    treeNodes.push({
-      nodeOrder: j,
-      x: x,
-      y: y
+let treeData: ({ order: number; avater?: string; name?: string; })[] = [];
+let againstData: ({ state: string; refereeId: number; record?: string; })[] = [];
+for (let i = 1; i < 18; i++) {
+  if (i < 5) {
+    treeData.push({
+      order: i,
+    });
+  }
+  else {
+    treeData.push({
+      order: i,
+      avater: favicon,
+      name: "No." + i
     });
   }
 }
-
-let treeCanvas = ref();
-onMounted(()=>{
-  let ctx = treeCanvas.value.getContext("2d");
-ctx.fillStyle= "red";
-treeNodes.forEach(node=>{
-  ctx.fillRect(node.x-30,node.y+60,60,60);
-})
+for(let i=1;i<9;i++){
+  let state="未开始";
+  if(treeData[2*i-1].name&&treeData[2*i]){
+    state = "进行中";
+  }
+  if(treeData[i-1].name){
+    state = "已结束";
+  }
+  if(state=="已结束"){
+    if(i<8){
+      againstData.push({
+        state:state,
+        refereeId:i
+      });
+    }
+    else{
+      againstData.push({
+        state:state,
+        refereeId:i,
+        record:state
+      });
+    }
+  }
+  else{
+    againstData.push({
+      state:state,
+      refereeId:i
+    })
+  }
 }
-)
+
+
 </script>
 
-<style></style>
+<style>
+
+</style>
