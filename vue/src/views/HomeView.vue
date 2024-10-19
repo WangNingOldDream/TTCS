@@ -31,23 +31,7 @@
                </template>
             </ElInput>
          </ElRow>
-         <ul class="no-style-ul" ref="scroll" v-infinite-scroll="load" :infinite-scroll-disabled="scrollDisabled"
-            infinite-scroll-distance="10" style="height:580px;margin-bottom: 0;overflow: auto;">
-            <li v-for="i in compLineNum" :key="i" style="display: flex;justify-content: space-evenly;">
-               <ElCard v-on:click="openComp" v-for="j in i == compLineNum ? searchedComps.length - 3 * (i - 1) : 3" :key="j" shadow="hover">
-                  <img :src="searchedComps[3 * (i - 1) + j - 1].cover" style="width: 100%;height: 100%;" />
-                  <template #footer>
-                     <ElRow justify="center">
-                        <ElText style="width: 200px;" truncated size="large">
-                           {{ searchedComps[3 * (i - 1) + j - 1].name }}
-                        </ElText>
-                        <ElTag :type="elTagType[searchedComps[3 * (i - 1) + j - 1].state as keyof typeof elTagType]">
-                           {{ searchedComps[3 * (i - 1) + j - 1].state }}</ElTag>
-                     </ElRow>
-                  </template>
-               </ElCard>
-            </li>
-         </ul>
+         <CompList :comps="comps" :scroll-disabled="scrollDisabled" v-on:load="loadComp" v-on:cardClick="openComp"></CompList>
       </ElTabPane>
       <ElTabPane label="个人" name="个人">
          <ElTabs tab-position="left" type="card">
@@ -226,16 +210,10 @@
 
 import { ref } from "vue";
 import logo from "/logo.png";
-import type { EpPropMergeType } from "element-plus/es/utils/vue/props/types";
-
 import { useRouter } from 'vue-router'
+import CompList from "@/components/CompList.vue";
+
 const router = useRouter();
-
-function openComp(){
-   router.push("/Comp")
-}
-
-type TagType = EpPropMergeType<StringConstructor, "primary" | "success" | "danger" | "warning" | "info", unknown>;
 
 let mainTab = ref("首页");
 
@@ -297,99 +275,54 @@ const notice = [
    },
 ];
 
-let searchedComps = ref([
+let comps = ref([
    {
-      name: "乒乓球赛事系统",
+      id: 0,
+      name: "乒乓球赛事0",
       date: "2024.1.1",
       cover: logo,
       state: "准备中"
    },
    {
-      name: "乒乓球赛事系统",
+      id: 1,
+      name: "乒乓球赛事1",
       date: "2024.1.1",
       cover: logo,
       state: "进行中"
    },
    {
-      name: "乒乓球赛事系统",
+      id: 2,
+      name: "乒乓球赛事2",
       date: "2024.1.1",
       cover: logo,
       state: "已结束"
    },
-   {
-      name: "乒乓球赛事系统",
-      date: "2024.1.1",
-      cover: logo,
-      state: "准备中"
-   },
-   {
-      name: "乒乓球赛事系统",
-      date: "2024.1.1",
-      cover: logo,
-      state: "进行中"
-   },
-   {
-      name: "乒乓球赛事系统",
-      date: "2024.1.1",
-      cover: logo,
-      state: "已结束"
-   },
-   {
-      name: "乒乓球赛事系统",
-      date: "2024.1.1",
-      cover: logo,
-      state: "准备中"
-   },
-   {
-      name: "乒乓球赛事系统",
-      date: "2024.1.1",
-      cover: logo,
-      state: "进行中"
-   },
-   {
-      name: "乒乓球赛事系统",
-      date: "2024.1.1",
-      cover: logo,
-      state: "已结束"
-   },
-]);
-
-let compLineNum = 3;
-
+])
 let searchText = ref("");
 
 let scrollDisabled = ref(false);
 
-const elTagType = {
-   "准备中": "primary" as TagType,
-   "进行中": "success" as TagType,
-   "已结束": "danger" as TagType,
-};
-
-function load() {
-   if (searchedComps.value.length > 20) {
+function loadComp() {
+   if (comps.value.length > 20) {
       scrollDisabled.value = true;
       return;
    }
-   searchedComps.value.push({
-      name: "乒乓球赛事系统" + compLineNum,
+   comps.value.push({
+      id: comps.value.length,
+      name: "乒乓球赛事" + comps.value.length,
       date: "2024.1.1",
       cover: logo,
       state: "准备中"
-   },
-      {
-         name: "乒乓球赛事系统" + compLineNum,
-         date: "2024.1.1",
-         cover: logo,
-         state: "进行中"
-      },
-      {
-         name: "乒乓球赛事系统" + compLineNum,
-         date: "2024.1.1",
-         cover: logo,
-         state: "已结束"
-      });
-   compLineNum = Math.ceil(searchedComps.value.length / 3);
+   });
+}
+function openComp(compId:number){
+   let url = router.resolve({
+      name:'comp',
+      params:{
+         compId:compId
+      }
+   });
+   open(url.href,"_blank")
 }
 
 let userInfo = ref({
@@ -532,19 +465,4 @@ function deleteParticipants() {
    padding-bottom: 0;
 }
 
-.noneStyleUl {
-   list-style: none;
-   padding: 0;
-}
-
-.el-card {
-   width: 360px;
-   height: 280px;
-   margin-bottom: 10px;
-}
-
-:deep(.el-card__body) {
-   width: 320px;
-   height: 180px;
-}
 </style>

@@ -2,14 +2,14 @@
     <div ref="compTreeWrapper" style="position: relative;">
         <canvas ref="lineCanvas" :width="canvasW" :height="canvasH" style="position: absolute;left: 0;top: 0;">
         </canvas>
-        <div v-for="(item, index) in treeData" v-bind:key="index"
+        <div v-for="(item, index) in treeData" v-bind:key="item.order"
             :style="{ position: 'absolute', left: nodePositions[index].x + 'px', top: nodePositions[index].y + 'px', width: nodeW + 'px', height: nodeH + 'px' }"
             style="text-align: center;">
             <img v-if="item.avatar" :src="item.avatar" width="60" height="60" />
             <img v-else :src="logo" width="60" height="60" />
             <ElText style="width: 100px;height: 20px;text-align: center;" truncated>{{ item.name ? item.name : "未知" }}
             </ElText>
-            <ElButton v-if="shouldBtnShow(index, role)" type="primary" style="width: 90px;height: 30px;margin-top: 15px">{{
+            <ElButton v-if="shouldBtnShow(index, role)" type="primary" style="width: 90px;height: 30px;margin-top: 15px" v-on:click="$emit('btnClick', item.order)">{{
                 getBtnText(index, role) }}
             </ElButton>
         </div>
@@ -34,8 +34,6 @@ const { treeData, againstData, userId, role } = defineProps<{
     userId: number,
     role: string
 }>();
-
-let btnText = "";
 
 const nodeW = 100;
 const nodeH = 140;
@@ -113,4 +111,4 @@ function getBtnText(index: number, role: string) {
 
 </script>
 
-<style></style>
+<style scoped></style>
