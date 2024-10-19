@@ -1,5 +1,6 @@
 package com.example.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -11,7 +12,7 @@ import java.io.Serializable;
  */
 @TableName(value ="tree")
 public class Tree implements Serializable {
-    @TableId(value = "id")
+    @TableId(type = IdType.AUTO,value = "id")
     private Integer id;
 
     @TableField(value = "competition_id")

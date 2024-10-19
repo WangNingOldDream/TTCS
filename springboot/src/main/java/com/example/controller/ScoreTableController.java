@@ -1,9 +1,11 @@
 package com.example.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.common.Result;
 import com.example.entity.Admin;
 import com.example.entity.ScoreTable;
+import com.example.entity.Tree;
 import com.example.service.impl.AdminService;
 import com.example.service.impl.ScoreTableServiceImpl;
 import com.github.pagehelper.PageInfo;
@@ -23,7 +25,7 @@ public class ScoreTableController {
      */
     @PostMapping("/add")
     public Result add(@RequestBody ScoreTable scoreTable) {
-//        scoreTableService.add(scoreTable);
+        scoreTableService.save(scoreTable);
         return Result.success();
     }
 
@@ -32,8 +34,7 @@ public class ScoreTableController {
      */
     @DeleteMapping("/delete/{id}")
     public Result deleteById(@PathVariable Integer id) {
-//        scoreTableService.deleteById(id);
-//        return Result.success();
+        scoreTableService.removeById(id);
         return Result.success();
     }
 
@@ -42,7 +43,7 @@ public class ScoreTableController {
      */
     @DeleteMapping("/delete/batch")
     public Result deleteBatch(@RequestBody List<Integer> ids) {
-//        scoreTableService.deleteBatch(ids);
+        scoreTableService.removeByIds(ids);
         return Result.success();
     }
 
@@ -60,19 +61,24 @@ public class ScoreTableController {
      */
     @GetMapping("/selectById/{id}")
     public Result selectById(@PathVariable Integer id) {
-//        ScoreTable scoreTable = scoreTableService.selectById(id);
-//        return Result.success(scoreTable);
-        return Result.success();
+        ScoreTable scoreTable = scoreTableService.getById(id);
+        return Result.success(scoreTable);
     }
 
     /**
      * 查询所有
      */
-    @GetMapping("/selectAll")
-    public Result selectAll(ScoreTable scoreTable ) {
-//        List<ScoreTable> list = scoreTableService.selectAll(scoreTable);
-//        return Result.success(list);
-        return Result.success();
+    @GetMapping("/selectAllByCId/{params}")
+    public Result selectAllByCId( @PathVariable String  params ) {
+        List<ScoreTable> list=null;
+        if(params!=null&&!"".equals(params)){
+            QueryWrapper<ScoreTable> queryWrapper=new QueryWrapper<>();
+            queryWrapper.eq("against_contest_id",params);
+            list=scoreTableService.list(queryWrapper);
+            return Result.success(list);
+        }
+        list = scoreTableService.list();
+        return Result.success(list);
     }
 
     /**

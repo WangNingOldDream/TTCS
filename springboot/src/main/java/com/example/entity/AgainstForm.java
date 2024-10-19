@@ -1,9 +1,12 @@
 package com.example.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.boot.test.autoconfigure.data.cassandra.DataCassandraTest;
 
 import java.io.Serializable;
@@ -22,7 +25,7 @@ public class AgainstForm implements Serializable {
     /**
      * 选手对阵表id,tableId表示为自增主键，在传参过程中不需要此字段
      */
-    @TableId(value = "against_contest_id")
+    @TableId(type = IdType.AUTO,value = "against_contest_id")
     private Integer againstContestId;
 
     /**
