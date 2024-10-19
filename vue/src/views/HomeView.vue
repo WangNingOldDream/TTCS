@@ -313,13 +313,27 @@ function loadComp() {
       date: "2024.1.1",
       cover: logo,
       state: "准备中"
+   },
+   {
+      id: comps.value.length+1,
+      name: "乒乓球赛事" + (comps.value.length+1),
+      date: "2024.1.1",
+      cover: logo,
+      state: "进行中"
+   },
+   {
+      id: comps.value.length+2,
+      name: "乒乓球赛事" + (comps.value.length+2),
+      date: "2024.1.1",
+      cover: logo,
+      state: "已结束"
    });
 }
-function openComp(compId:number){
+function openComp(compName:string){
    let url = router.resolve({
       name:'comp',
       params:{
-         compId:compId
+         compName:compName
       }
    });
    open(url.href,"_blank")

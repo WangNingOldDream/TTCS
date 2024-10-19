@@ -11,7 +11,7 @@ const router = createRouter({
       component: FirstView
     },
     {
-      path: '/comp/:compId',
+      path: '/comp/:compName',
       name: 'comp',
       component: CompView
     },
