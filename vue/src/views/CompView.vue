@@ -8,12 +8,14 @@
 <script setup lang="ts">
 import defaultAvatar from '/defaultAvatar.png';
 import CompTree from "@/components/CompTree.vue";
+import { onMounted } from 'vue';
 import { useRouter,useRoute } from 'vue-router'
 
 const router = useRouter();
 const route = useRoute();
 
 const compName = route.params.compName;
+const compId = route.params.compId;
 
 let treeData: ({ order: number; avatar?: string; name?: string; })[] = [];
 let againstData: ({ state: string; refereeId: number; record?: string; })[] = [];
@@ -64,7 +66,7 @@ for(let i=1;i<9;i++){
 }
 
 const userId = 1;
-const role = "裁判员";
+let role = "裁判员";
 
 function btnClick(order:number){
   if(role=="裁判员"){
@@ -74,9 +76,21 @@ function btnClick(order:number){
         compName:compName,
         players:order*2+"vs"+(order*2+1)
       }
-    })
+    });
+  }
+  else{
+    if(role=="赛事管理员"){
+      //put:againstId+比赛视频=>是否成功
+    }
+    else{
+      //get:againstId=>比赛视频
+    }
   }
 }
+
+onMounted(()=>{
+  //get:赛事id=>tree+againstform+参加赛事的用户头像和用户名
+})
 
 </script>
 

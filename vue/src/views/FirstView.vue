@@ -74,14 +74,14 @@
         <ElFormItem label="验证码" style="margin-top: 30px;">
           <ElInput v-model="VCode">
             <template #append>
-              <ElButton v-on:click="clickVCButton" v-bind:disabled="VCButton.disabled">{{ VCButton.text }}</ElButton>
+              <ElButton v-on:click="getVC" v-bind:disabled="VCButton.disabled">{{ VCButton.text }}</ElButton>
             </template>
           </ElInput>
         </ElFormItem>
         <ElFormItem style="margin-top: 30px;">
           <div style="width: 100%;text-align: center;">
             <ElButton v-on:click="changePanel('userInfo1')">上一页</ElButton>
-            <ElButton type="primary">注册</ElButton>
+            <ElButton type="primary" v-on:click="register">注册</ElButton>
           </div>
         </ElFormItem>
       </ElForm>
@@ -102,14 +102,14 @@
         <ElFormItem label="验证码" style="margin-top: 40px;">
           <ElInput v-model="VCode">
             <template #append>
-              <ElButton v-on:click="clickVCButton" v-bind:disabled="VCButton.disabled">{{ VCButton.text }}</ElButton>
+              <ElButton v-on:click="getVC" v-bind:disabled="VCButton.disabled">{{ VCButton.text }}</ElButton>
             </template>
           </ElInput>
         </ElFormItem>
         <ElFormItem style="margin-top: 40px;">
           <div style="width: 100%;text-align: center;">
             <ElButton v-on:click="changePanel('login')">返回</ElButton>
-            <ElButton type="primary">修改</ElButton>
+            <ElButton type="primary" v-on:click="updatePassword">修改</ElButton>
           </div>
         </ElFormItem>
       </ElForm>
@@ -126,7 +126,7 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 let entryVideo = ref();
 let panelName = ref("");
-let userInfo = reactive({
+let userInfo = ref({
   userName: "",
   password: "",
   name: "",
@@ -139,7 +139,7 @@ let userInfo = reactive({
 const TTLs = ["四级", "五级", "六级", "七级", "八级", "九级"];
 let confirmPassword = ref("");
 let VCode = ref("");
-let VCButton = reactive({
+let VCButton = ref({
   disabled: false,
   text: "获取验证码",
   duration: 5
@@ -152,6 +152,7 @@ onMounted(function () {
 });
 
 function login() {
+  //get:userName+password=>用户名与密码是否正确+userId
   router.push("/home")
 }
 
@@ -159,20 +160,29 @@ function changePanel(name: string) {
   panelName.value = name;
 }
 
-function clickVCButton() {
-  VCButton.disabled = true;
-  let time = VCButton.duration;
+function getVC() {
+  VCButton.value.disabled = true;
+  let time = VCButton.value.duration;
   let timer = setInterval(function () {
     if (time > 0) {
-      VCButton.text = time + "秒后启用";
+      VCButton.value.text = time + "秒后启用";
       time--;
     }
     else {
-      VCButton.disabled = false;
-      VCButton.text = "获取验证码";
+      VCButton.value.disabled = false;
+      VCButton.value.text = "获取验证码";
       clearInterval(timer);
     }
-  }, 1000)
+  }, 1000);
+  //get:email=>是否发送成功
+}
+
+function register(){
+  //post:用户信息+验证码=>是否注册成功+userId
+}
+
+function updatePassword(){
+  //put:旧密码+新密码=>是否修改成功
 }
 
 </script>

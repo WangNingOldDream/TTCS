@@ -2,7 +2,7 @@
     <ul class="noneStyleUl" ref="scroll" v-infinite-scroll="load" :infinite-scroll-disabled="scrollDisabled"
             infinite-scroll-distance="10" style="height:580px;margin-bottom: 0;overflow: auto;">
             <li v-for="item in comps" v-bind:key="item.name">
-               <ElCard v-on:click="$emit('cardClick', item.name)" shadow="hover">
+               <ElCard v-on:click="$emit('cardClick', item.id, item.name)" shadow="hover">
                   <img :src="item.cover" style="width: 100%;height: 100%;" />
                   <template #footer>
                      <ElRow justify="center">
@@ -25,6 +25,7 @@ type TagType = EpPropMergeType<StringConstructor, "primary" | "success" | "dange
 
 const { comps, scrollDisabled } = defineProps<{
     comps: {
+      id:number,
         cover: string,
         name: string,
         state: string
@@ -34,7 +35,7 @@ const { comps, scrollDisabled } = defineProps<{
 
 const emit = defineEmits<{
   load: [],
-  cardClick: [name: string]
+  cardClick: [id:number,name: string]
 }>()
 
 const elTagType = {

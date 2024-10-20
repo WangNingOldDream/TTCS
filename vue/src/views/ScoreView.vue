@@ -58,7 +58,11 @@ let players = ref([{
 ]);
 
 function addScore(pos:number){
+    //get:againstId+节点order=>小局是否结束+大局是否结束
+}
 
+function update(){
+    //get:againstId=>大局比分和小局比分
 }
 
 </script>

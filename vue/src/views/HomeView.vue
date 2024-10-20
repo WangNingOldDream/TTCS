@@ -27,11 +27,12 @@
          <ElRow justify="center">
             <ElInput v-model="searchText" style="width: 400px;margin-bottom: 20px;">
                <template #suffix>
-                  <ElButton type="primary">搜索</ElButton>
+                  <ElButton type="primary" v-on:click="searchComps">搜索</ElButton>
                </template>
             </ElInput>
          </ElRow>
-         <CompList :comps="comps" :scroll-disabled="scrollDisabled" v-on:load="loadComp" v-on:cardClick="openComp"></CompList>
+         <CompList :comps="comps" :scroll-disabled="scrollDisabled" v-on:load="loadComps" v-on:cardClick="openComp">
+         </CompList>
       </ElTabPane>
       <ElTabPane label="个人" name="个人">
          <ElTabs tab-position="left" type="card">
@@ -73,7 +74,7 @@
                   <ElFormItem style="margin-top: 30px;">
                      <div style="width: 100%;text-align: center;">
                         <ElButton v-show="!fixing" type="primary" v-on:click="fixBtnClick">修改</ElButton>
-                        <ElButton v-show="fixing" type="primary" v-on:click="fixConfirm">确认</ElButton>
+                        <ElButton v-show="fixing" type="primary" v-on:click="updateUserInfo">确认</ElButton>
                         <ElButton v-show="fixing" v-on:click="fixCancel">取消</ElButton>
                      </div>
                   </ElFormItem>
@@ -95,7 +96,7 @@
                         <ElFormItem label="赛事名称">
                            <ElInput v-model="editedComp.name">
                               <template #suffix>
-                                 <ElButton type="primary">查询</ElButton>
+                                 <ElButton type="primary" v-on:click="queryComp">查询</ElButton>
                               </template>
                            </ElInput>
                         </ElFormItem>
@@ -178,7 +179,7 @@
                   </ElCol>
                </ElRow>
                <div style="width: 100%;margin-top: 10px;text-align: center;">
-                  <ElButton>确认</ElButton>
+                  <ElButton v-on="manageComp">确认</ElButton>
                </div>
                <el-dialog v-model="addDialog" title="增加参与人员" width="500">
                   <el-form>
@@ -205,10 +206,22 @@
          </ElTabs>
       </ElTabPane>
    </ElTabs>
+   <!-- <el-dialog v-model="roleDialog" title="选择身份" width="500">
+            <el-select v-model="addedIdentity">
+            </el-select>
+      <template #footer>
+         <div class="dialog-footer">
+            <el-button v-on:click="addDialog = false">取消</el-button>
+            <el-button type="primary" v-on:click="addParticipant">
+               确认
+            </el-button>
+         </div>
+      </template>
+   </el-dialog> -->
 </template>
 <script setup lang="ts">
 
-import { ref } from "vue";
+import { nextTick, onMounted, ref } from "vue";
 import logo from "/logo.png";
 import { useRouter } from 'vue-router'
 import CompList from "@/components/CompList.vue";
@@ -302,43 +315,6 @@ let searchText = ref("");
 
 let scrollDisabled = ref(false);
 
-function loadComp() {
-   if (comps.value.length > 20) {
-      scrollDisabled.value = true;
-      return;
-   }
-   comps.value.push({
-      id: comps.value.length,
-      name: "乒乓球赛事" + comps.value.length,
-      date: "2024.1.1",
-      cover: logo,
-      state: "准备中"
-   },
-   {
-      id: comps.value.length+1,
-      name: "乒乓球赛事" + (comps.value.length+1),
-      date: "2024.1.1",
-      cover: logo,
-      state: "进行中"
-   },
-   {
-      id: comps.value.length+2,
-      name: "乒乓球赛事" + (comps.value.length+2),
-      date: "2024.1.1",
-      cover: logo,
-      state: "已结束"
-   });
-}
-function openComp(compName:string){
-   let url = router.resolve({
-      name:'comp',
-      params:{
-         compName:compName
-      }
-   });
-   open(url.href,"_blank")
-}
-
 let userInfo = ref({
    userName: "",
    password: "",
@@ -383,10 +359,6 @@ const aboutComps = [
 function fixBtnClick() {
    fixing.value = true;
    userInfoCopy = userInfo.value;
-}
-
-function fixConfirm() {
-   fixing.value = false;
 }
 
 function fixCancel() {
@@ -436,16 +408,70 @@ let addDialog = ref(false)
 
 let currentIndex: number | undefined = undefined;
 
-function addParticipant() {
-   participants.value.push({
-      name: addedName.value,
-      identity: addedIdentity.value
-   });
-   addDialog.value = false;
-}
-
 function changeRow(row: any) {
    currentIndex = participants.value.indexOf(row);
+}
+
+onMounted(() => {
+   //get:用户id=>最近6个赛事+所有新闻+所有公告+用户信息+用户参赛信息
+});
+
+
+function searchComps(){
+   //loadComps
+}
+
+function loadComps() {
+   //get:赛事id+搜索文本=>赛事名称或赛事状态中含有搜索文本的比该比赛晚创建的最近6个赛事
+   //get:搜索文本=>赛事名称或赛事状态中含有搜索文本的最近6个赛事
+   //get:赛事id=>比该比赛晚创建的最近6个赛事
+   if (comps.value.length > 20) {
+      scrollDisabled.value = true;
+      return;
+   }
+   comps.value.push({
+      id: comps.value.length,
+      name: "乒乓球赛事" + comps.value.length,
+      date: "2024.1.1",
+      cover: logo,
+      state: "准备中"
+   },
+      {
+         id: comps.value.length + 1,
+         name: "乒乓球赛事" + (comps.value.length + 1),
+         date: "2024.1.1",
+         cover: logo,
+         state: "进行中"
+      },
+      {
+         id: comps.value.length + 2,
+         name: "乒乓球赛事" + (comps.value.length + 2),
+         date: "2024.1.1",
+         cover: logo,
+         state: "已结束"
+      });
+}
+
+function openComp(compId: number, compName: string) {
+   //get:赛事id+用户id+role=>是否存在身份
+   let url = router.resolve({
+      name: 'comp',
+      params: {
+         compName: compName,
+         compId: compId
+      }
+   });
+   open(url.href, "_blank")
+}
+
+
+function updateUserInfo() {
+   //put:用户信息=>是否成功
+   fixing.value = false;
+}
+
+function queryComp(){
+   //get:用户id+赛事名称=>以该用户为赛事管理员的赛事信息和参与人员
 }
 
 function deleteParticipants() {
@@ -454,6 +480,17 @@ function deleteParticipants() {
    }
 }
 
+function addParticipant() {
+   participants.value.push({
+      name: addedName.value,
+      identity: addedIdentity.value
+   });
+   addDialog.value = false;
+}
+
+function manageComp(){
+   //post:赛事信息+role表=>根据赛事是否存在及其状态，创建或修改赛事信息+根据role数量是否增减增或删role表，返回是否成功
+}
 
 </script>
 
@@ -478,5 +515,4 @@ function deleteParticipants() {
    padding-right: 0;
    padding-bottom: 0;
 }
-
 </style>
