@@ -1,18 +1,23 @@
 <template>
   <h1 style="width: 100%;height: 50px;background-color: #ff4d00;margin-top: 0;text-align: center;">{{ compName }}</h1>
   <div style="display: flex;justify-content: center; width: 100%;height:auto">
-  <CompTree :tree-data="treeData" :against-data="againstData" :user-id="1" role="裁判员"></CompTree>
+  <CompTree :tree-data="treeData" :against-data="againstData" :user-id="userId" :role="role" v-on:btnClick="btnClick"></CompTree>
   </div>
 </template>
 
 <script setup lang="ts">
 import defaultAvatar from '/defaultAvatar.png';
 import CompTree from "@/components/CompTree.vue";
+import { useRouter,useRoute } from 'vue-router'
 
-const compName = "乒乓球赛事系统";
+const router = useRouter();
+const route = useRoute();
+
+const compName = route.params.compName;
 
 let treeData: ({ order: number; avatar?: string; name?: string; })[] = [];
 let againstData: ({ state: string; refereeId: number; record?: string; })[] = [];
+
 for (let i = 1; i < 18; i++) {
   if (i < 5) {
     treeData.push({
@@ -58,6 +63,20 @@ for(let i=1;i<9;i++){
   }
 }
 
+const userId = 1;
+const role = "裁判员";
+
+function btnClick(order:number){
+  if(role=="裁判员"){
+    router.push({
+      name:'score',
+      params:{
+        compName:compName,
+        players:order*2+"vs"+(order*2+1)
+      }
+    })
+  }
+}
 
 </script>
 
