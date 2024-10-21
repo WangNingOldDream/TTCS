@@ -1,21 +1,24 @@
 <template>
   <h1 style="width: 100%;height: 50px;background-color: #ff4d00;margin-top: 0;text-align: center;">{{ compName }}</h1>
   <div style="display: flex;justify-content: center; width: 100%;height:auto">
-  <CompTree :tree-data="treeData" :against-data="againstData" :user-id="userId" :role="role" v-on:btnClick="btnClick"></CompTree>
+  <CompTree :tree-data="treeData" :against-data="againstData" :user-id="1" :role="role" v-on:btnClick="btnClick"></CompTree>
   </div>
 </template>
 
 <script setup lang="ts">
-import defaultAvatar from '/defaultAvatar.png';
+import defaultAvatar from '@/assets/defaultAvatar.png';
 import CompTree from "@/components/CompTree.vue";
+import { useInfoStore } from '@/stores/info';
 import { onMounted } from 'vue';
 import { useRouter,useRoute } from 'vue-router'
 
 const router = useRouter();
 const route = useRoute();
+const infoStore = useInfoStore();
+const userId = infoStore.userId;
+const role = infoStore.role;
 
 const compName = route.params.compName;
-const compId = route.params.compId;
 
 let treeData: ({ order: number; avatar?: string; name?: string; })[] = [];
 let againstData: ({ state: string; refereeId: number; record?: string; })[] = [];
@@ -60,13 +63,10 @@ for(let i=1;i<9;i++){
   else{
     againstData.push({
       state:state,
-      refereeId:1
+      refereeId:1,
     })
   }
 }
-
-const userId = 1;
-let role = "裁判员";
 
 function btnClick(order:number){
   if(role=="裁判员"){
@@ -90,6 +90,7 @@ function btnClick(order:number){
 
 onMounted(()=>{
   //get:赛事id=>tree+againstform+参加赛事的用户头像和用户名
+  console.log(role)
 })
 
 </script>

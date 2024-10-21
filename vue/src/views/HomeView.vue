@@ -31,7 +31,7 @@
                </template>
             </ElInput>
          </ElRow>
-         <CompList :comps="comps" :scroll-disabled="scrollDisabled" v-on:load="loadComps" v-on:cardClick="openComp">
+         <CompList :comps="comps" :scroll-disabled="scrollDisabled" v-on:load="loadComps" v-on:cardClick="selectRole">
          </CompList>
       </ElTabPane>
       <ElTabPane label="个人" name="个人">
@@ -181,52 +181,57 @@
                <div style="width: 100%;margin-top: 10px;text-align: center;">
                   <ElButton v-on="manageComp">确认</ElButton>
                </div>
-               <el-dialog v-model="addDialog" title="增加参与人员" width="500">
-                  <el-form>
-                     <el-form-item label="参与人员">
-                        <el-input v-model="addedName" />
-                     </el-form-item>
-                     <el-form-item label="参与身份">
-                        <el-select v-model="addedIdentity">
-                           <el-option label="运动员" value="运动员" />
-                           <el-option label="裁判员" value="裁判员" />
-                        </el-select>
-                     </el-form-item>
-                  </el-form>
+               <ElDialog v-model="addDialog" title="增加参与人员" width="500">
+                  <ElForm>
+                     <ElFormItem label="参与人员">
+                        <ElInput v-model="addedName" />
+                     </ElFormItem>
+                     <ElFormItem label="参与身份">
+                        <ElSelect v-model="addedIdentity">
+                           <ElOption label="运动员" value="运动员" />
+                           <ElOption label="裁判员" value="裁判员" />
+                     </ElSelect>
+                     </ElFormItem>
+                  </ElForm>
                   <template #footer>
                      <div class="dialog-footer">
-                        <el-button v-on:click="addDialog = false">取消</el-button>
-                        <el-button type="primary" v-on:click="addParticipant">
+                        <ElButton v-on:click="addDialog = false">取消</ElButton>
+                        <ElButton type="primary" v-on:click="addParticipant">
                            确认
-                        </el-button>
+                        </ElButton>
                      </div>
                   </template>
-               </el-dialog>
+               </ElDialog>
             </ElTabPane>
          </ElTabs>
       </ElTabPane>
    </ElTabs>
-   <!-- <el-dialog v-model="roleDialog" title="选择身份" width="500">
-            <el-select v-model="addedIdentity">
-            </el-select>
+   <ElDialog v-model="roleDialog" title="选择身份" width="500">
+            <ElSelect v-model="role">
+               <ElOption label="赛事管理员" value="赛事管理员" />
+               <ElOption label="裁判员" value="裁判员" />
+               <ElOption label="观众" value="观众" />
+            </ElSelect>
       <template #footer>
          <div class="dialog-footer">
-            <el-button v-on:click="addDialog = false">取消</el-button>
-            <el-button type="primary" v-on:click="addParticipant">
+            <ElButton v-on:click="roleDialog = false">取消</ElButton>
+            <ElButton type="primary" v-on:click="openComp">
                确认
-            </el-button>
+            </ElButton>
          </div>
       </template>
-   </el-dialog> -->
+   </ElDialog>
 </template>
 <script setup lang="ts">
 
-import { nextTick, onMounted, ref } from "vue";
+import { onMounted, ref } from "vue";
 import logo from "/logo.png";
 import { useRouter } from 'vue-router'
 import CompList from "@/components/CompList.vue";
+import { useInfoStore } from "@/stores/info";
 
 const router = useRouter();
+const infoStore = useInfoStore();
 
 let mainTab = ref("首页");
 
@@ -316,6 +321,7 @@ let searchText = ref("");
 let scrollDisabled = ref(false);
 
 let userInfo = ref({
+   userId: 0,
    userName: "",
    password: "",
    name: "",
@@ -412,6 +418,12 @@ function changeRow(row: any) {
    currentIndex = participants.value.indexOf(row);
 }
 
+let roleDialog = ref(false)
+
+let role = ref("")
+
+let compName = ""
+
 onMounted(() => {
    //get:用户id=>最近6个赛事+所有新闻+所有公告+用户信息+用户参赛信息
 });
@@ -452,16 +464,22 @@ function loadComps() {
       });
 }
 
-function openComp(compId: number, compName: string) {
+function selectRole(id:number,name:string){
+   infoStore.compId=id;
+   compName=name;
+   roleDialog.value=true;
+}
+
+function openComp() {
    //get:赛事id+用户id+role=>是否存在身份
-   let url = router.resolve({
+   infoStore.compId=0;
+   infoStore.role = role.value;
+   router.push({
       name: 'comp',
       params: {
          compName: compName,
-         compId: compId
       }
    });
-   open(url.href, "_blank")
 }
 
 

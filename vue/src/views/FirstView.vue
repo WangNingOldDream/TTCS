@@ -119,11 +119,14 @@
 
 <script setup lang="ts">
 
-import entryAnim from "@/assets/entryAnim.mp4"
-import { onMounted, ref, reactive } from "vue"
+import entryAnim from "@/assets/entryAnim.mp4";
+import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
+import { useInfoStore } from "@/stores/info";
 
 const router = useRouter();
+const infoStore = useInfoStore();
+
 let entryVideo = ref();
 let panelName = ref("");
 let userInfo = ref({
@@ -142,10 +145,10 @@ let VCode = ref("");
 let VCButton = ref({
   disabled: false,
   text: "获取验证码",
-  duration: 5
+  duration: 60
 });
 
-onMounted(function () {
+onMounted(() => {
   entryVideo.value.addEventListener("ended", function () {
     panelName.value = "login";
   });
@@ -153,6 +156,7 @@ onMounted(function () {
 
 function login() {
   //get:userName+password=>用户名与密码是否正确+userId
+  infoStore.userId = 0;
   router.push("/home")
 }
 
@@ -177,11 +181,11 @@ function getVC() {
   //get:email=>是否发送成功
 }
 
-function register(){
+function register() {
   //post:用户信息+验证码=>是否注册成功+userId
 }
 
-function updatePassword(){
+function updatePassword() {
   //put:旧密码+新密码=>是否修改成功
 }
 
