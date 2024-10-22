@@ -1,6 +1,7 @@
 package com.example.mapper;
 
 import com.example.entity.AgainstForm;
+import com.example.entity.SimpleUserInfo;
 import com.example.mapper.AgainstFormMapper;
 import org.junit.runner.RunWith;
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class MapperInterfaceTest {
     @Autowired
     private AgainstFormMapper againstFormMapper;
+    @Autowired
+    private CommonUserMapper commonUserMapper;
     @Test
     void selectById(){
         AgainstForm againstFormList=againstFormMapper.selectByAgainstContestId(1);
@@ -44,4 +47,10 @@ class MapperInterfaceTest {
     void deleteById(){
         againstFormMapper.delByAgainstContestId(2);
     }
+
+    @Test
+    void selectAllInComp(){
+       List<SimpleUserInfo> simpleUserInfos = commonUserMapper.selectAllInComp(1);
+    }
+
 }

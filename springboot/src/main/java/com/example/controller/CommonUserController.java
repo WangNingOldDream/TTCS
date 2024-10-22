@@ -3,6 +3,7 @@ package com.example.controller;
 import com.example.common.Result;
 import com.example.entity.Admin;
 import com.example.entity.CommonUser;
+import com.example.entity.SimpleUserInfo;
 import com.example.service.impl.CommonUserServiceImpl;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
@@ -79,5 +80,11 @@ public class CommonUserController {
                              @RequestParam(defaultValue = "10") Integer pageSize) {
         PageInfo<CommonUser> page = commonUserService.selectPage(admin, pageNum, pageSize);
         return Result.success(page);
+    }
+
+    @GetMapping("/selectAllUserInComp/{compId}")
+    public Result selectAllByCompId(@PathVariable Integer compId) {
+        List<SimpleUserInfo> simpleUserInfo = commonUserService.selectAllByCompId(compId);
+        return Result.success(simpleUserInfo);
     }
 }

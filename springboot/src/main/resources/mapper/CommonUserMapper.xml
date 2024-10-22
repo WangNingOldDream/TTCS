@@ -22,4 +22,9 @@
         birth_place,TTC_level,mail,
         avatar
     </sql>
+    <select id="selectAllInComp" resultType="com.example.entity.SimpleUserInfo">
+        SELECT role.user_id, common_user.account_name, common_user.avatar
+        FROM role JOIN common_user ON role.user_id = common_user.userID
+        WHERE role.competition_id = #{compId,jdbcType=NUMERIC};
+    </select>
 </mapper>

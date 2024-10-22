@@ -1,7 +1,13 @@
 package com.example.mapper;
 
+import com.example.entity.AgainstForm;
 import com.example.entity.CommonUser;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.example.entity.SimpleUserInfo;
+import com.example.service.impl.CommonUserServiceImpl;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * @author 天道酬勤hsy
@@ -10,7 +16,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @Entity com.example.entity.CommonUser
 */
 public interface CommonUserMapper extends BaseMapper<CommonUser> {
-
+    List<SimpleUserInfo> selectAllInComp(@Param("compId") Integer compId);
 }
 
 

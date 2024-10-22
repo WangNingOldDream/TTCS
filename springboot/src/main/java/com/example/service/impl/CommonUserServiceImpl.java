@@ -7,11 +7,13 @@ import com.example.common.enums.ResultCodeEnum;
 import com.example.common.enums.RoleEnum;
 import com.example.entity.Admin;
 import com.example.entity.CommonUser;
+import com.example.entity.SimpleUserInfo;
 import com.example.exception.CustomException;
 import com.example.mapper.AdminMapper;
 import com.example.service.CommonUserService;
 import com.example.mapper.CommonUserMapper;
 import com.github.pagehelper.PageInfo;
+import org.apache.ibatis.javassist.Loader;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -92,6 +94,16 @@ public class CommonUserServiceImpl extends ServiceImpl<CommonUserMapper, CommonU
     public void updatePassword(CommonUser commonUser){
 
     }
+
+
+
+    public List<SimpleUserInfo> selectAllByCompId(Integer compId) {
+        List<SimpleUserInfo> userInfos=new ArrayList<>();
+        userInfos= commonUserMapper.selectAllInComp(compId);
+        return userInfos;
+    }
+
+
 }
 
 
