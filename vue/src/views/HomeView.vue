@@ -1,29 +1,29 @@
 <template>
-   <ElTabs type="card" v-model="mainTab">
-      <ElTabPane label="首页" name="首页">
+   <ElTabs type="card">
+      <ElTabPane label="首页">
          <ElRow justify="space-evenly">
             <ElCarousel height="320px" style="width: 640px;">
-               <ElCarouselItem v-for="item in imgList" :key="item.name">
-                  <img :src="item.img" style="height:100%;width: 100%;object-fit: contain;" />
+               <ElCarouselItem v-for="item in lastComps" :key="item.id">
+                  <img :src="item.cover" style="height:100%;width: 100%;object-fit: contain;" v-on:click="selectRole(item.id,item.name)"/>
                </ElCarouselItem>
             </ElCarousel>
-            <ElTable :data="news" height="320px" style="width: 640px;background-color: aqua;">
+            <ElTable :data="news" height="320px" style="width: 640px;" v-on:row-click="getNews">
                <ElTableColumn prop="title" label="新闻"></ElTableColumn>
                <ElTableColumn prop="date" label="发布日期" width="100px"></ElTableColumn>
             </ElTable>
          </ElRow>
          <ElRow justify="space-evenly">
-            <ElTable :data="firstPageComps" height="320px" style="width: 640px;background-color: aqua;">
+            <ElTable :data="lastComps" height="320px" style="width: 640px;" v-on:row-click="compsTableRowClick">
                <ElTableColumn prop="name" label="赛事"></ElTableColumn>
                <ElTableColumn prop="date" label="举办日期" width="100px"></ElTableColumn>
             </ElTable>
-            <ElTable :data="notice" height="320px" style="width: 640px;background-color: aqua;">
+            <ElTable :data="notices" height="320px" style="width: 640px;" v-on:row-click="getNotice">
                <ElTableColumn prop="title" label="公告"></ElTableColumn>
                <ElTableColumn prop="date" label="发布日期" width="100px"></ElTableColumn>
             </ElTable>
          </ElRow>
       </ElTabPane>
-      <ElTabPane label="赛事" name="赛事" lazy>
+      <ElTabPane label="赛事" lazy>
          <ElRow justify="center">
             <ElInput v-model="searchText" style="width: 400px;margin-bottom: 20px;">
                <template #suffix>
@@ -34,7 +34,7 @@
          <CompList :comps="comps" :scroll-disabled="scrollDisabled" v-on:load="loadComps" v-on:cardClick="selectRole">
          </CompList>
       </ElTabPane>
-      <ElTabPane label="个人" name="个人">
+      <ElTabPane label="个人">
          <ElTabs tab-position="left" type="card">
             <ElTabPane label="个人信息" style="display: flex;justify-content: center;">
                <ElForm label-width="auto" style="width: 400px;">
@@ -225,24 +225,18 @@
 <script setup lang="ts">
 
 import { onMounted, ref } from "vue";
+import { ElMessage } from "element-plus";
 import logo from "/logo.png";
-import { useRouter } from 'vue-router'
 import CompList from "@/components/CompList.vue";
+import { useRouter } from 'vue-router'
 import { useInfoStore } from "@/stores/info";
 
 const router = useRouter();
 const infoStore = useInfoStore();
 
-let mainTab = ref("首页");
+let lastComps: any[] = [];
 
-const imgList = [
-   {
-      name: "logo",
-      img: logo
-   },
-];
-
-const news = [
+let news = [
    {
       title: "乒乓球赛事系统",
       date: "2024.1.1"
@@ -257,28 +251,7 @@ const news = [
    },
 ];
 
-const firstPageComps = [
-   {
-      name: "乒乓球赛事系统",
-      date: "2024.1.1",
-      cover: logo,
-      state: "准备中"
-   },
-   {
-      name: "乒乓球赛事系统",
-      date: "2024.1.1",
-      cover: logo,
-      state: "进行中"
-   },
-   {
-      name: "乒乓球赛事系统",
-      date: "2024.1.1",
-      cover: logo,
-      state: "已结束"
-   },
-];
-
-const notice = [
+let notices = [
    {
       title: "乒乓球赛事系统",
       date: "2024.1.1"
@@ -338,7 +311,7 @@ let fixing = ref(false);
 
 let userInfoCopy = userInfo.value;
 
-const aboutComps = [
+let aboutComps = [
    {
       name: "乒乓球赛事系统",
       identity: "赛事管理员",
@@ -426,8 +399,27 @@ let compName = ""
 
 onMounted(() => {
    //get:用户id=>最近6个赛事+所有新闻+所有公告+用户信息+用户参赛信息
+   lastComps = [];
+   news = [];
+   notices = [];
+   userInfo.value;
+   aboutComps = [];
 });
 
+function compsTableRowClick(row:any){
+   let comp = lastComps.find(item => item.name=row.name);
+   selectRole(comp.id,comp.name);
+}
+
+function getNews(row:any){
+   news.find(item => item.title=row.title);
+   //get:新闻id=>新闻
+}
+
+function getNotice(row:any){
+   notices.find(item => item.title=row.title);
+   //get:通知id=>通知
+}
 
 function searchComps(){
    //loadComps
@@ -472,20 +464,36 @@ function selectRole(id:number,name:string){
 
 function openComp() {
    //get:赛事id+用户id+role=>是否存在身份
-   infoStore.compId=0;
    infoStore.role = role.value;
-   router.push({
+   let flag = true;
+   if(flag){
+      ElMessage.success("进入赛事");
+      router.push({
       name: 'comp',
       params: {
          compName: compName,
       }
    });
+   }
+   else{
+      ElMessage.error("无法进入");
+   }
+   
+
 }
 
 
 function updateUserInfo() {
    //put:用户信息=>是否成功
    fixing.value = false;
+   let flag = true;
+   if(flag){
+      ElMessage.success("修改成功");
+      userInfo.value = userInfoCopy;
+   }
+   else{
+      ElMessage.error("修改失败");
+   }
 }
 
 function queryComp(){

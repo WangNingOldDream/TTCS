@@ -120,6 +120,7 @@
 <script setup lang="ts">
 
 import entryAnim from "@/assets/entryAnim.mp4";
+import { ElMessage } from 'element-plus'
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useInfoStore } from "@/stores/info";
@@ -156,8 +157,16 @@ onMounted(() => {
 
 function login() {
   //get:userName+password=>用户名与密码是否正确+userId
-  infoStore.userId = 0;
-  router.push("/home")
+  let flag = true;
+  let userId = 0;
+  if(flag){
+    ElMessage.success("登录成功");
+    infoStore.userId = 0;
+    router.push("/home");
+  }
+  else{
+    ElMessage.error("用户名或密码错误");
+  }
 }
 
 function changePanel(name: string) {
@@ -165,6 +174,10 @@ function changePanel(name: string) {
 }
 
 function getVC() {
+  //get:email=>是否发送成功
+  let flag = true;
+  if(flag){
+    ElMessage.success("发送成功");
   VCButton.value.disabled = true;
   let time = VCButton.value.duration;
   let timer = setInterval(function () {
@@ -177,16 +190,35 @@ function getVC() {
       VCButton.value.text = "获取验证码";
       clearInterval(timer);
     }
-  }, 1000);
-  //get:email=>是否发送成功
+  }, 1000);}
+  else{
+    ElMessage.error("发送失败");
+  }
 }
 
 function register() {
   //post:用户信息+验证码=>是否注册成功+userId
+  let flag=true;
+  let userId = 0;
+  if(flag){
+    ElMessage.success("注册成功");
+    infoStore.userId = userId;
+    router.push("/home")
+  }
+  else{
+    ElMessage.error("注册失败");
+  }
 }
 
 function updatePassword() {
   //put:旧密码+新密码=>是否修改成功
+  let flag=true;
+  if(flag){
+    ElMessage.success("修改成功");
+  }
+  else{
+    ElMessage.error("修改失败");
+  }
 }
 
 </script>
