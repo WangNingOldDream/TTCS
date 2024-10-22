@@ -4,14 +4,20 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.StrUtil;
 import com.example.common.Result;
+import com.example.entity.AgainstForm;
+import com.example.service.impl.AgainstFormServiceImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.List;
+
+import static com.example.common.enums.ResultCodeEnum.SUCCESS;
 
 /**
  * 文件接口
@@ -28,12 +34,14 @@ public class FileController {
 
     @Value("${ip:localhost}")
     private String ip;
+    @Resource
+    private AgainstFormServiceImpl againstFormService;
 
     /**
      * 文件上传
      */
-    @PostMapping("/upload")
-    public Result upload(MultipartFile file) {
+    @PostMapping("/upload/{againstId}")
+    public Result upload(MultipartFile file,@PathVariable Integer againstId) {
         String flag;
         synchronized (FileController.class) {
             flag = System.currentTimeMillis() + "";
@@ -52,7 +60,21 @@ public class FileController {
             System.err.println(fileName + "--文件上传失败");
         }
         String http = "http://" + ip + ":" + port + "/files/";
-        return Result.success(http + flag + "-" + fileName);  //  http://localhost:9090/files/1697438073596-avatar.png
+        String url=http + flag + "-" + fileName;  //  http://localhost:9090/files/1697438073596-avatar.
+
+        //更新数据库
+        AgainstForm againstForm=againstFormService.getById(againstId);
+        againstForm.setRecord(url);
+        againstFormService.updateById(againstForm);
+
+        HashMap<String,Object> data=new HashMap<>();
+        data.put("flag",true);
+        data.put("url",url);
+        Result res =new Result();
+        res.setCode(SUCCESS.code);
+        res.setMsg("文件上传成功");
+        res.setData(data);
+        return Result.success(data);
     }
 
 
@@ -79,6 +101,33 @@ public class FileController {
             System.out.println("文件下载失败");
         }
     }
+
+    /**
+     * 获取文件
+     * @param againstId
+     * @param response
+     */
+    @GetMapping("/getFile/{againstId}")   //  1697438073596-avatar.png
+    public void avatarPath(@PathVariable Integer againstId, HttpServletResponse response) {
+        OutputStream os;
+        try {
+            if (againstId!=null) {
+                String url=againstFormService.getById(againstId).getRecord();
+                if(url!=null) {
+                    response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(url, "UTF-8"));
+                    response.setContentType("application/octet-stream");
+                    byte[] bytes = FileUtil.readBytes(url);
+                    os = response.getOutputStream();
+                    os.write(bytes);
+                    os.flush();
+                    os.close();
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("文件下载失败");
+        }
+    }
+
 
     /**
      * 删除文件
