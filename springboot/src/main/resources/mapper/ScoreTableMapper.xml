@@ -15,4 +15,16 @@
         contest_num_id,against_contest_id,player1_small_score,
         player2_small_score
     </sql>
+    <select id="getP1Points" resultType="java.lang.Integer">
+        select player1_small_score
+        from score_table
+        where against_contest_id = #{againstContestId}
+        ORDER BY contest_num_id
+    </select>
+    <select id="getP2Points" resultType="java.lang.Integer">
+        select player2_small_score
+        from score_table
+        where against_contest_id = #{againstContestId}
+        ORDER BY contest_num_id
+    </select>
 </mapper>

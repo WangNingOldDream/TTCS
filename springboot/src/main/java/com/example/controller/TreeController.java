@@ -3,18 +3,20 @@ package com.example.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.common.Result;
+import com.example.common.enums.ResultCodeEnum;
 import com.example.entity.AgainstForm;
 import com.example.entity.Role;
 import com.example.entity.Tree;
 import com.example.service.impl.RoleServiceImpl;
 import com.example.service.impl.TreeServiceImpl;
 import com.github.pagehelper.PageInfo;
+import com.sun.net.httpserver.Authenticator;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+
+import static com.example.common.enums.ResultCodeEnum.SUCCESS;
 
 @RestController
 @RequestMapping("/tree")
@@ -75,15 +77,28 @@ public class TreeController {
      */
     @GetMapping("/selectAll")
     public Result selectAll(String params) {
+        HashMap<String,Object> data=new HashMap<String,Object>();
+        Result result=new Result();
         List<Tree> list=null;
         if(params!=null&&!"".equals(params)){
+
             QueryWrapper<Tree> queryWrapper=new QueryWrapper<>();
             queryWrapper.eq("competition_id",params);
             list=treeService.list(queryWrapper);
-            return Result.success(list);
+            data.put("data",list);
+            data.put("flag",true);
+            result.setCode(SUCCESS.code);
+            result.setMsg("查找指定赛事的树信息成功");
+            result.setData(data);
+            return result;
         }
         list = treeService.list();
-        return Result.success(list);
+        data.put("data",list);
+        data.put("flag",true);
+        result.setCode(SUCCESS.code);
+        result.setMsg("查找出所有的树信息成功");
+        result.setData(data);
+        return result;
     }
 
     /**

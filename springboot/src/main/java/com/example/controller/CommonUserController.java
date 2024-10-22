@@ -9,7 +9,11 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+
+import static com.example.common.enums.ResultCodeEnum.PARAM_ERROR;
+import static com.example.common.enums.ResultCodeEnum.SUCCESS;
 
 @RestController
 @RequestMapping("/common-user")
@@ -85,6 +89,16 @@ public class CommonUserController {
     @GetMapping("/selectAllUserInComp/{compId}")
     public Result selectAllByCompId(@PathVariable Integer compId) {
         List<SimpleUserInfo> simpleUserInfo = commonUserService.selectAllByCompId(compId);
-        return Result.success(simpleUserInfo);
+        if(simpleUserInfo==null||simpleUserInfo.isEmpty()){
+            return Result.error(PARAM_ERROR);
+        }
+        HashMap<String,Object> data=new HashMap<String,Object>();
+        Result result=new Result();
+        data.put("data",simpleUserInfo);
+        data.put("flag",true);
+        result.setCode(SUCCESS.code);
+        result.setMsg("查找赛事相关用户信息成功");
+        result.setData(data);
+        return result;
     }
 }
