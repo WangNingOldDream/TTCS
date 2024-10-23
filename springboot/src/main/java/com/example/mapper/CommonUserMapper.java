@@ -17,6 +17,13 @@ import java.util.List;
 */
 public interface CommonUserMapper extends BaseMapper<CommonUser> {
     List<SimpleUserInfo> selectAllInComp(@Param("compId") Integer compId);
+
+    // 根据用户名和密码查询用户，用于登录
+    CommonUser selectByAccount(@Param("userName") String userName, @Param("password") String password);
+
+
+    // 只根据用户名查询用户，用于检查用户是否存在
+    CommonUser selectByAccountName(@Param("userName") String userName);
 }
 
 

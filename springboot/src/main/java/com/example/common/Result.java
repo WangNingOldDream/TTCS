@@ -49,6 +49,22 @@ public class Result {
         return tResult;
     }
 
+    //支持 String 参数的 error 方法(ax)
+    public static Result error(String message) {
+        Result result = new Result();
+        result.setCode("400"); // 错误码可以根据需求设置
+        result.setMsg(message); // 错误信息
+        return result;
+    }
+
+    //(ax)
+    public static Result success(String message, Object data) {
+        Result result = new Result();
+        result.setCode("200"); // 可以根据业务需求设置正确的返回码
+        result.setMsg(message); // 设置返回的消息
+        result.setData(data);   // 设置返回的数据
+        return result;
+    }
     public String getCode() {
         return code;
     }

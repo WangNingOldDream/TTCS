@@ -101,4 +101,99 @@ public class CommonUserController {
         result.setData(data);
         return result;
     }
+
+    //登录验证（ax）
+    @GetMapping("/login")
+    public Result login(@RequestParam String userName, @RequestParam String password) {
+        // 调用 service 层方法
+        CommonUser user = commonUserService.selectByAccount(userName, password);
+        if (user != null) {
+            HashMap<String, Object> data = new HashMap<>();
+            data.put("userId", user.getUserid());
+            data.put("flag", true);
+            return Result.success(data);
+        } else {
+            return Result.error("用户名或密码错误");
+        }
+    }
+
+    //发送验证码（ax）
+    @GetMapping("/sendVCode")
+    public Result sendVCode(@RequestParam String email) {
+        boolean isSent = commonUserService.sendVerificationCode(email);
+        if (isSent) {
+            HashMap<String, Object> data = new HashMap<>();
+            data.put("flag", true);
+            return Result.success("验证码发送成功", data);
+        } else {
+            return Result.error("验证码发送失败");
+        }
+    }
+
+    //注册用户(ax)
+    @PostMapping("/register")
+    public Result register(@RequestBody CommonUser commonUser, @RequestParam String vCode) {
+        boolean isCorrectCode = commonUserService.verifyCode(commonUser.getMail(), vCode);
+        if (!isCorrectCode) {
+            return Result.error("验证码错误");
+        }
+
+        boolean userExists = commonUserService.checkIfUserExists(commonUser.getAccountName());
+        if (userExists) {
+            return Result.error("用户已存在");
+        }
+
+        boolean isRegistered = commonUserService.add(commonUser);
+        if (isRegistered) {
+            HashMap<String, Object> data = new HashMap<>();
+            data.put("userId", commonUser.getUserid());
+            data.put("flag", true);
+            return Result.success("注册成功", data);
+        } else {
+            return Result.error("注册失败");
+        }
+    }
+
+
+    //密码更改(ax)
+    @PutMapping("/updatePassword")
+    public Result updatePassword(@RequestParam String userName, @RequestParam String oldPassword, @RequestParam String newPassword) {
+        CommonUser user = commonUserService.selectByAccount(userName, oldPassword);
+        if (user == null) {
+            return Result.error("旧密码错误");
+        }
+
+        user.setAccountPassword(newPassword);
+        boolean isUpdated = commonUserService.updateById(user);
+        if (isUpdated) {
+            return Result.success("密码修改成功");
+        } else {
+            return Result.error("密码修改失败");
+        }
+    }
+
+     //获取用户信息(ax)
+    @GetMapping("/userInfo/{userId}")
+    public Result getUserInfo(@PathVariable Integer userId) {
+        CommonUser user = commonUserService.selectById(userId);
+        if (user != null) {
+            return Result.success(user);
+        } else {
+            return Result.error("用户不存在");
+        }
+    }
+
+    /**
+     * 更新用户信息(ax)
+     */
+    @PutMapping("/updateInfo")
+    public Result updateUserInfo(@RequestBody CommonUser commonUser) {
+        boolean isUpdated = commonUserService.updateById(commonUser);
+        if (isUpdated) {
+            return Result.success("修改成功");
+        } else {
+            return Result.error("修改失败");
+        }
+    }
+
 }

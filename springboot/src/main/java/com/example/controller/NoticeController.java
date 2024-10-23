@@ -84,4 +84,14 @@ public class NoticeController {
 //        return Result.success(page);
         return Result.success();
     }
+
+
+    /**
+     * 获取所有新闻公告(ax)
+     */
+    @GetMapping("/selectAll")
+    public Result selectAll() {
+        List<Notice> notices = noticeService.list();
+        return Result.success("获取所有公告成功", notices);
+    }
 }
