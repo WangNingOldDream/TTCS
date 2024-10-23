@@ -4,15 +4,14 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.common.Result;
 import com.example.entity.AgainstForm;
 import com.example.entity.Role;
-import com.example.entity.Tree;
-import com.example.service.impl.AgainstFormServiceImpl;
-import com.example.service.impl.RoleServiceImpl;
-import com.example.service.impl.TreeServiceImpl;
-import com.github.pagehelper.PageInfo;
+import com.example.service.impl.*;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+
+import static com.example.common.enums.ResultCodeEnum.SUCCESS;
 
 @RestController
 @RequestMapping("/against")
@@ -25,6 +24,8 @@ public class AgainstFormController {
     private TreeServiceImpl treeService;
     @Resource
     private RoleServiceImpl roleService;
+    @Resource
+    private CompetitionFormatServiceImpl compFormatService;
     /**
      * 新增
      */
@@ -66,27 +67,8 @@ public class AgainstFormController {
     @PutMapping("/win")
     public Result updateFatherNode(@RequestBody AgainstForm againstForm) {
         againstForm = againstFormService.getById(againstForm.getAgainstContestId());
-        Integer p1LS= (againstForm.getPlayer1LargeScore()==null)?0:againstForm.getPlayer1LargeScore(),
-                p2LS= (againstForm.getPlayer1LargeScore()==null)?0:againstForm.getPlayer2LargeScore();
-        if(p1LS==4||p2LS==4){//七局四胜
-            Integer treeOrder=0;
-            if(p1LS-p2LS>0){
-                 treeOrder=againstForm.getOrderInCompetition()*2;
-            }else{
-                 treeOrder=againstForm.getOrderInCompetition()*2+1;
-            }
-            QueryWrapper<Tree> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("competition_id", againstForm.getCompetitionId());
-            queryWrapper.eq("node_order", treeOrder);
-            Tree tree = treeService.getOne(queryWrapper);
-
-            QueryWrapper<Tree> queryWrapper2 = new QueryWrapper<>();
-            queryWrapper2.eq("competition_id", againstForm.getCompetitionId());
-            queryWrapper2.eq("node_order", againstForm.getOrderInCompetition());
-            Tree fatherTree=treeService.getOne(queryWrapper2);
-
-            fatherTree.setPlayerId(tree.getPlayerId());
-            treeService.updateById(fatherTree);
+        if(againstFormService.isMatchOver(againstForm, compFormatService.getCompFormat(againstForm.getCompetitionId()))){//七局四胜
+            againstFormService.updateFatherInTree(againstForm,treeService);
         }
         return Result.success();
     }
@@ -106,16 +88,28 @@ public class AgainstFormController {
     @GetMapping("/selectAll")
     public Result selectAll(String params) {
         List<AgainstForm> list=null;
+        HashMap<String,Object> data=new HashMap<String,Object>();
+        Result result=new Result();
         if(params!=null&&!"".equals(params)){
             QueryWrapper<AgainstForm> queryWrapper=new QueryWrapper<>();
             queryWrapper.like("competition_id",params);
             queryWrapper.or();
             queryWrapper.like("against_contest_id",params);
-            list=againstFormService.list(queryWrapper);
-            return Result.success(list);
+            list = againstFormService.list(queryWrapper);
+            data.put("data",list);
+            data.put("flag",true);
+            result.setCode(SUCCESS.code);
+            result.setMsg("查找指定赛事的对阵信息成功");
+            result.setData(data);
+            return result;
         }
         list = againstFormService.list();
-        return Result.success(list);
+        data.put("data",list);
+        data.put("flag",true);
+        result.setCode(SUCCESS.code);
+        result.setMsg("查找出所有的对阵信息");
+        result.setData(data);
+        return result;
     }
 
 
