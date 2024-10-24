@@ -28,17 +28,17 @@
         WHERE role.competition_id = #{compId,jdbcType=NUMERIC};
     </select>
 
-    <resultMap id="BaseResultMap" type="com.example.entity.CommonUser">
-        <id property="userid" column="userID" jdbcType="INTEGER"/>
-        <result property="accountName" column="account_name" jdbcType="VARCHAR"/>
-        <result property="accountPassword" column="account_password" jdbcType="VARCHAR"/>
-        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
-        <result property="userSex" column="user_sex" jdbcType="VARCHAR"/>
-        <result property="birthday" column="birthday" jdbcType="DATE"/>
-        <result property="birthPlace" column="birth_place" jdbcType="VARCHAR"/>
-        <result property="ttcLevel" column="TTC_level" jdbcType="VARCHAR"/>
-        <result property="mail" column="mail" jdbcType="VARCHAR"/>
-    </resultMap>
+<!--    <resultMap id="BaseResultMap" type="com.example.entity.CommonUser">-->
+<!--        <id property="userid" column="userID" jdbcType="INTEGER"/>-->
+<!--        <result property="accountName" column="account_name" jdbcType="VARCHAR"/>-->
+<!--        <result property="accountPassword" column="account_password" jdbcType="VARCHAR"/>-->
+<!--        <result property="userName" column="user_name" jdbcType="VARCHAR"/>-->
+<!--        <result property="userSex" column="user_sex" jdbcType="VARCHAR"/>-->
+<!--        <result property="birthday" column="birthday" jdbcType="DATE"/>-->
+<!--        <result property="birthPlace" column="birth_place" jdbcType="VARCHAR"/>-->
+<!--        <result property="ttcLevel" column="TTC_level" jdbcType="VARCHAR"/>-->
+<!--        <result property="mail" column="mail" jdbcType="VARCHAR"/>-->
+<!--    </resultMap>-->
 
     <select id="selectByAccount" resultMap="BaseResultMap">
         SELECT
