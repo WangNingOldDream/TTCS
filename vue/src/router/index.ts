@@ -23,7 +23,7 @@ const router = createRouter({
       component: CompView
     },
     {
-      path: '/score/:compName/:players',
+      path: '/score/:compName/:order',
       name: 'score',
       component: ScoreView
     },
