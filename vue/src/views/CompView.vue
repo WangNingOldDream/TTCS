@@ -74,7 +74,7 @@ function btnClick(order:number){
       name:'score',
       params:{
         compName:compName,
-        players:order*2+"vs"+(order*2+1)
+        players:order
       }
     });
   }

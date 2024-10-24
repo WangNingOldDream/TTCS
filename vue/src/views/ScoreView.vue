@@ -27,18 +27,41 @@
         </ElRow>
         <ElRow style="height: auto;justify-content: space-evenly;align-items: center;flex: 1;">
             <div style="display: flex;justify-content:center;align-items: center;width: 30%;height: 100%;">
-                <ElButton style="width: 300px;height: 400px;opacity: 0.9;font-size: 200px;" v-on:click="addScore(0)" :style="players[0].serving?servingBtn:''">
+                <ElButton style="width: 300px;height: 400px;opacity: 0.9;font-size: 200px;" v-on:click="addScore(0)"
+                    :style="players[0].serving ? servingBtn : ''">
                     {{ players[0].gameScores.slice(-1)[0] }}</ElButton>
             </div>
             <ElDivider direction="vertical" style="height: 100%;border-width: 2px;"></ElDivider>
             <div style="display: flex;justify-content:center;align-items: center;width: 30%;height: 100%;">
-                <ElButton style="width: 300px;height: 400px;opacity: 0.9;font-size: 200px;" v-on:click="addScore(1)"  :style="players[1].serving?servingBtn:''">{{
-                    players[1].gameScores.slice(-1)[0] }}</ElButton>
+                <ElButton style="width: 300px;height: 400px;opacity: 0.9;font-size: 200px;" v-on:click="addScore(1)"
+                    :style="players[1].serving ? servingBtn : ''">{{
+                        players[1].gameScores.slice(-1)[0] }}</ElButton>
             </div>
         </ElRow>
     </div>
-    <ElDialog>
-
+    <ElDialog v-model="startDialog" title="发球与场地选择" width="500">
+        <ElText>{{ firstPlayer }}拥有优先选择权</ElText>
+        <ElForm>
+            <ElFormItem label="发球运动员">
+                <ElSelect v-model="serving">
+                    <ElOption :label="players[0].name" :value="players[0].name"></ElOption>
+                    <ElOption :label="players[1].name" :value="players[1].name"></ElOption>
+                </ElSelect>
+            </ElFormItem>
+            <ElFormItem label="左侧运动员">
+                <ElSelect v-model="left">
+                    <ElOption :label="players[0].name" :value="players[0].name"></ElOption>
+                    <ElOption :label="players[1].name" :value="players[1].name"></ElOption>
+                </ElSelect>
+            </ElFormItem>
+        </ElForm>
+        <template #footer>
+            <div class="dialog-footer">
+                <ElButton type="primary" v-on:click="start">
+                    确认
+                </ElButton>
+            </div>
+        </template>
     </ElDialog>
 </template>
 
@@ -49,32 +72,51 @@ import logo from "/logo.png"
 import ball from "@/assets/ball.jpg"
 
 const servingBtn = {
-    "background": "url("+ball+")",
+    "background": "url(" + ball + ")",
     "background-size": "100% 100%"
-}
+};
+
+let startDialog = ref(true);
+
+let serving = ref();
+
+let left = ref();
 
 let players = ref([{
     avatar: logo,
     name: "123",
     gameScores: [11, 0],
     matchScore: 1,
-    serving:true
+    serving: true
 },
 {
     avatar: logo,
     name: "456",
     gameScores: [7, 0],
     matchScore: 0,
-    serving:false
+    serving: false
 }
 ]);
 
+const firstPlayer = players.value[Math.floor(Math.random() * players.value.length)].name;
+
+function start() {
+    if (left.value == players.value[1].name) players.value.reverse();
+    if (serving.value == players.value[1].name) {
+        players.value[0].serving = false;
+        players.value[1].serving = true;
+    }
+    startDialog.value = false;
+}
+
 function addScore(pos: number) {
     //get:againstId+节点order=>小局是否结束+大局是否结束
+    update();
 }
 
 function update() {
     //get:againstId=>大局比分和小局比分
+    
 }
 
 </script>

@@ -4,7 +4,8 @@
          <ElRow justify="space-evenly">
             <ElCarousel height="320px" style="width: 640px;">
                <ElCarouselItem v-for="item in lastComps" :key="item.id">
-                  <img :src="item.cover" style="height:100%;width: 100%;object-fit: contain;" v-on:click="selectRole(item.id,item.name)"/>
+                  <img :src="item.cover" style="height:100%;width: 100%;object-fit: contain;"
+                     v-on:click="selectRole(item.id, item.name)" />
                </ElCarouselItem>
             </ElCarousel>
             <ElTable :data="news" height="320px" style="width: 640px;" v-on:row-click="getNews">
@@ -190,7 +191,7 @@
                         <ElSelect v-model="addedIdentity">
                            <ElOption label="运动员" value="运动员" />
                            <ElOption label="裁判员" value="裁判员" />
-                     </ElSelect>
+                        </ElSelect>
                      </ElFormItem>
                   </ElForm>
                   <template #footer>
@@ -207,11 +208,11 @@
       </ElTabPane>
    </ElTabs>
    <ElDialog v-model="roleDialog" title="选择身份" width="500">
-            <ElSelect v-model="role">
-               <ElOption label="赛事管理员" value="赛事管理员" />
-               <ElOption label="裁判员" value="裁判员" />
-               <ElOption label="观众" value="观众" />
-            </ElSelect>
+      <ElSelect v-model="role">
+         <ElOption label="赛事管理员" value="赛事管理员" />
+         <ElOption label="裁判员" value="裁判员" />
+         <ElOption label="观众" value="观众" />
+      </ElSelect>
       <template #footer>
          <div class="dialog-footer">
             <ElButton v-on:click="roleDialog = false">取消</ElButton>
@@ -221,6 +222,7 @@
          </div>
       </template>
    </ElDialog>
+   <ElDrawer v-model="noticeDrawer" :title="drawerTitle">{{ drawerContent }}</ElDrawer>
 </template>
 <script setup lang="ts">
 
@@ -228,6 +230,7 @@ import { onMounted, ref } from "vue";
 import { ElMessage } from "element-plus";
 import logo from "/logo.png";
 import CompList from "@/components/CompList.vue";
+import axios from "axios"
 import { useRouter } from 'vue-router'
 import { useInfoStore } from "@/stores/info";
 
@@ -236,32 +239,43 @@ const infoStore = useInfoStore();
 
 let lastComps: any[] = [];
 
+let noticeDrawer = ref(false);
+
+let drawerTitle = ref("");
+let drawerContent = ref("");
+
 let news = [
    {
-      title: "乒乓球赛事系统",
+      id: 1,
+      title: "乒乓球赛事系统1",
       date: "2024.1.1"
    },
    {
-      title: "乒乓球赛事系统",
+      id: 2,
+      title: "乒乓球赛事系统2",
       date: "2024.1.1"
    },
    {
-      title: "乒乓球赛事系统",
+      id: 3,
+      title: "乒乓球赛事系统3",
       date: "2024.1.1"
    },
 ];
 
 let notices = [
    {
-      title: "乒乓球赛事系统",
+      id: 4,
+      title: "乒乓球赛事系统4",
       date: "2024.1.1"
    },
    {
-      title: "乒乓球赛事系统",
+      id: 5,
+      title: "乒乓球赛事系统5",
       date: "2024.1.1"
    },
    {
-      title: "乒乓球赛事系统",
+      id: 6,
+      title: "乒乓球赛事系统6",
       date: "2024.1.1"
    },
 ];
@@ -399,6 +413,22 @@ let compName = ""
 
 onMounted(() => {
    //get:用户id=>最近6个赛事+所有新闻+所有公告+用户信息+用户参赛信息
+   axios
+      .get('')
+      .then()
+      .catch()
+   axios
+      .get('')
+      .then()
+      .catch()
+   axios
+      .get('')
+      .then()
+      .catch()
+   axios
+      .get('')
+      .then()
+      .catch()
    lastComps = [];
    news = [];
    notices = [];
@@ -406,22 +436,36 @@ onMounted(() => {
    aboutComps = [];
 });
 
-function compsTableRowClick(row:any){
-   let comp = lastComps.find(item => item.name=row.name);
-   selectRole(comp.id,comp.name);
+function compsTableRowClick(row: any) {
+   let comp = lastComps.find(item => item.name = row.name);
+   selectRole(comp.id, comp.name);
 }
 
-function getNews(row:any){
-   news.find(item => item.title=row.title);
+function getNews(row: any) {
+   let id = news.find(item => item.title = row.title)?.id;
    //get:新闻id=>新闻
+   axios
+      .get('')
+      .then()
+      .catch()
+   drawerTitle.value = row.title;
+   drawerContent.value = "";
+   noticeDrawer.value = true;
 }
 
-function getNotice(row:any){
-   notices.find(item => item.title=row.title);
+function getNotice(row: any) {
+   let id = notices.find(item => item.title = row.title)?.id;
    //get:通知id=>通知
+   axios
+      .get('')
+      .then()
+      .catch()
+   drawerTitle.value = row.title;
+   drawerContent.value = "";
+   noticeDrawer.value = true;
 }
 
-function searchComps(){
+function searchComps() {
    //loadComps
 }
 
@@ -429,6 +473,10 @@ function loadComps() {
    //get:赛事id+搜索文本=>赛事名称或赛事状态中含有搜索文本的比该比赛晚创建的最近6个赛事
    //get:搜索文本=>赛事名称或赛事状态中含有搜索文本的最近6个赛事
    //get:赛事id=>比该比赛晚创建的最近6个赛事
+   axios
+      .get('')
+      .then()
+      .catch()
    if (comps.value.length > 20) {
       scrollDisabled.value = true;
       return;
@@ -456,48 +504,60 @@ function loadComps() {
       });
 }
 
-function selectRole(id:number,name:string){
-   infoStore.compId=id;
-   compName=name;
-   roleDialog.value=true;
+function selectRole(id: number, name: string) {
+   infoStore.compId = id;
+   compName = name;
+   roleDialog.value = true;
 }
 
 function openComp() {
    //get:赛事id+用户id+role=>是否存在身份
+   axios
+      .get('')
+      .then()
+      .catch()
    infoStore.role = role.value;
    let flag = true;
-   if(flag){
+   if (flag) {
       ElMessage.success("进入赛事");
       router.push({
-      name: 'comp',
-      params: {
-         compName: compName,
-      }
-   });
+         name: 'comp',
+         params: {
+            compName: compName,
+         }
+      });
    }
-   else{
+   else {
       ElMessage.error("无法进入");
    }
-   
+
 
 }
 
 
 function updateUserInfo() {
    //put:用户信息=>是否成功
+   axios
+      .put('')
+      .then()
+      .catch()
    fixing.value = false;
    let flag = true;
-   if(flag){
+   if (flag) {
       ElMessage.success("修改成功");
       userInfo.value = userInfoCopy;
    }
-   else{
+   else {
       ElMessage.error("修改失败");
    }
 }
 
-function queryComp(){
+function queryComp() {
    //get:用户id+赛事名称=>以该用户为赛事管理员的赛事信息和参与人员
+   axios
+      .get('')
+      .then()
+      .catch()
 }
 
 function deleteParticipants() {
@@ -514,8 +574,12 @@ function addParticipant() {
    addDialog.value = false;
 }
 
-function manageComp(){
+function manageComp() {
    //post:赛事信息+role表=>根据赛事是否存在及其状态，创建或修改赛事信息+根据role数量是否增减增或删role表，返回是否成功
+   axios
+      .post('')
+      .then()
+      .catch()
 }
 
 </script>
