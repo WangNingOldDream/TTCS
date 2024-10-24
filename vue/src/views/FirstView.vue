@@ -124,6 +124,7 @@ import { ElMessage } from 'element-plus'
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useInfoStore } from "@/stores/info";
+import axios from "axios";
 
 const router = useRouter();
 const infoStore = useInfoStore();
@@ -157,16 +158,29 @@ onMounted(() => {
 
 function login() {
   //get:userName+password=>用户名与密码是否正确+userId
-  let flag = true;
-  let userId = 0;
-  if(flag){
-    ElMessage.success("登录成功");
-    infoStore.userId = 0;
-    router.push("/home");
-  }
-  else{
-    ElMessage.error("用户名或密码错误");
-  }
+  axios
+    .get('/login',{
+      params:{
+        userName:userInfo.value.userName,
+        password:userInfo.value.password
+      }
+    })
+    .then(res=>{
+      console.log(res)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+  // let flag = true;
+  // let userId = 0;
+  // if (flag) {
+  //   ElMessage.success("登录成功");
+  //   infoStore.userId = 0;
+  //   router.push("/home");
+  // }
+  // else {
+  //   ElMessage.error("用户名或密码错误");
+  // }
 }
 
 function changePanel(name: string) {
@@ -175,48 +189,61 @@ function changePanel(name: string) {
 
 function getVC() {
   //get:email=>是否发送成功
+  axios
+    .get('')
+    .then()
+    .catch()
   let flag = true;
-  if(flag){
+  if (flag) {
     ElMessage.success("发送成功");
-  VCButton.value.disabled = true;
-  let time = VCButton.value.duration;
-  let timer = setInterval(function () {
-    if (time > 0) {
-      VCButton.value.text = time + "秒后启用";
-      time--;
-    }
-    else {
-      VCButton.value.disabled = false;
-      VCButton.value.text = "获取验证码";
-      clearInterval(timer);
-    }
-  }, 1000);}
-  else{
+    VCButton.value.disabled = true;
+    let time = VCButton.value.duration;
+    let timer = setInterval(function () {
+      if (time > 0) {
+        VCButton.value.text = time + "秒后启用";
+        time--;
+      }
+      else {
+        VCButton.value.disabled = false;
+        VCButton.value.text = "获取验证码";
+        clearInterval(timer);
+      }
+    }, 1000);
+  }
+  else {
     ElMessage.error("发送失败");
   }
 }
 
 function register() {
   //post:用户信息+验证码=>是否注册成功+userId
-  let flag=true;
+  axios
+    .post('')
+    .then()
+    .catch()
+  let flag = true;
   let userId = 0;
-  if(flag){
+  if (flag) {
     ElMessage.success("注册成功");
     infoStore.userId = userId;
     router.push("/home")
   }
-  else{
+  else {
     ElMessage.error("注册失败");
   }
 }
 
 function updatePassword() {
   //put:旧密码+新密码=>是否修改成功
-  let flag=true;
-  if(flag){
+  axios
+    .put('')
+    .then()
+    .catch()
+  let flag = true;
+  if (flag) {
     ElMessage.success("修改成功");
   }
-  else{
+  else {
     ElMessage.error("修改失败");
   }
 }
