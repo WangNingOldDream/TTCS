@@ -60,4 +60,23 @@
         account_name = #{userName};
     </select>
 
+    <select id="selectById" parameterType="int" resultMap="BaseResultMap">
+        SELECT
+            userID,
+            account_name,
+            account_password,
+            user_name,
+            user_sex,
+            birthday,
+            birth_place,
+            TTC_level,
+            mail
+        FROM
+            common_user
+        WHERE
+            userID = #{userId}
+    </select>
+
+
+
 </mapper>

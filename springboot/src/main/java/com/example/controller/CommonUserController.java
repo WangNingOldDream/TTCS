@@ -173,15 +173,25 @@ public class CommonUserController {
     }
 
      //获取用户信息(ax)
-    @GetMapping("/userInfo/{userId}")
-    public Result getUserInfo(@PathVariable Integer userId) {
-        CommonUser user = commonUserService.selectById(userId);
-        if (user != null) {
-            return Result.success(user);
-        } else {
-            return Result.error("用户不存在");
-        }
-    }
+     @GetMapping("/userInfo/{userId}")
+     public Result getUserInfo(@PathVariable Integer userId) {
+         CommonUser user = commonUserService.selectById(userId);
+         if (user != null) {
+             HashMap<String, Object> data = new HashMap<>();
+             data.put("userId", user.getUserid());
+             data.put("userName", user.getAccountName());
+             data.put("password", "******"); // 隐藏密码
+             data.put("name", user.getUserName());
+             data.put("sex", user.getUserSex());
+             data.put("birthday", user.getBirthday());
+             data.put("birthPlace", user.getBirthPlace());
+             data.put("TTL", user.getTtcLevel());
+             data.put("email", user.getMail());
+             return Result.success(data);
+         } else {
+             return Result.error("用户不存在");
+         }
+     }
 
     /**
      * 更新用户信息(ax)

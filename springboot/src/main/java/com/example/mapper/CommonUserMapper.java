@@ -24,6 +24,11 @@ public interface CommonUserMapper extends BaseMapper<CommonUser> {
 
     // 只根据用户名查询用户，用于检查用户是否存在
     CommonUser selectByAccountName(@Param("userName") String userName);
+
+    // 根据用户 ID 查询用户信息
+    CommonUser selectById(@Param("userId") Integer userId);
+
+
 }
 
 

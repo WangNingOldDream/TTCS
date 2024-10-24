@@ -64,10 +64,10 @@ public class CommonUserServiceImpl extends ServiceImpl<CommonUserMapper, CommonU
     public void deleteBatch(List<Integer> ids) {
     }
 
-    public CommonUser selectById(Integer id) {
-        CommonUser commonUser=null;
 
-        return commonUser;
+
+    public CommonUser selectById(Integer userId) {
+        return commonUserMapper.selectById(userId);
     }
 
     public List<CommonUser> selectAll(CommonUser commonUser) {
@@ -136,7 +136,7 @@ public class CommonUserServiceImpl extends ServiceImpl<CommonUserMapper, CommonU
 
     @Override
     public boolean updateById(CommonUser commonUser) {
-        return super.updateById(commonUser);
+        return commonUserMapper.updateById(commonUser) > 0;
     }
 
     public CommonUser login(CommonUser commonUser){
