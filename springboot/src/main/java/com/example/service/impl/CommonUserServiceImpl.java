@@ -87,7 +87,6 @@ public class CommonUserServiceImpl extends ServiceImpl<CommonUserMapper, CommonU
         return commonUserMapper.selectByAccount(userName, password);
     }
 
-    @Autowired
     private JavaMailSender mailSender;
 
     // 生成并发送验证码到邮箱（ax）

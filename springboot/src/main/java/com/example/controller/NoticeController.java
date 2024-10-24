@@ -63,15 +63,6 @@ public class NoticeController {
         return Result.success();
     }
 
-    /**
-     * 查询所有
-     */
-    @GetMapping("/selectAll")
-    public Result selectAll(Notice notice) {
-//        List<Notice> list = noticeService.selectAll(notice);
-//        return Result.success(list);
-        return Result.success();
-    }
 
     /**
      * 分页查询
